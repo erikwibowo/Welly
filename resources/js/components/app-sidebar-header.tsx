@@ -23,11 +23,11 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
     }, []);
     return (
         <header
-            className={`border-sidebar-border/50 bg-background sticky inset-x-0 top-0 isolate z-1 flex w-full shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 ${scrollY > 0 ? 'bg-background/60 h-12 border-b backdrop-blur' : 'h-14'}`}
+            className={`border-sidebar-border/50 bg-background sticky inset-x-0 top-0 isolate z-1 flex w-full shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 ${scrollY > 0 ? 'bg-background/60 h-12 border-b backdrop-blur-lg' : 'h-14'}`}
         >
             <div className="mx-auto flex w-full items-center justify-between gap-2 px-4">
                 <div className="flex items-center gap-2">
-                    <SidebarTrigger />
+                    <SidebarTrigger className="hidden md:block" />
                     <Breadcrumbs breadcrumbs={breadcrumbs} />
                 </div>
                 <div className="flex items-center gap-2">
