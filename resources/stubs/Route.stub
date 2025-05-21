@@ -1,0 +1,7 @@
+<?php
+
+use App\Http\Controllers\{{modelName}}Controller;
+use Illuminate\Support\Facades\Route;
+
+Route::resource('{{modelNameKebabCase}}', {{modelName}}Controller::class)->except('create', 'show', 'edit');
+Route::post('{{modelNameKebabCase}}/destroy-bulk', [{{modelName}}Controller::class, 'destroyBulk'])->name('{{modelNameKebabCase}}.destroy-bulk');
