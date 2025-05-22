@@ -27,7 +27,7 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
         >
             <div className="mx-auto flex w-full items-center justify-between gap-2 px-4">
                 <div className="flex items-center gap-2">
-                    <SidebarTrigger className="hidden md:block" />
+                    <SidebarTrigger className="hidden md:flex" />
                     <Breadcrumbs breadcrumbs={breadcrumbs} />
                 </div>
                 <div className="flex items-center gap-2">

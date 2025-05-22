@@ -29,13 +29,14 @@ const BottomNavItem = ({ href, icon, label, isActive }: BottomNavItemProps) => {
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary',
             )}
         >
-            <div className={cn('flex size-5 items-center justify-center rounded-full', isActive && 'fill-primary/20')}>{icon}</div>
+            <div className={cn('flex w-full items-center justify-center rounded-full p-1', isActive && 'fill-primary/20 bg-primary/20')}>{icon}</div>
             <span className="line-clamp-1 text-center text-xs">{label}</span>
         </Link>
     );
 };
 
 export function BottomNavbar() {
+    const dashboardText = useLang('text', 'dashboard');
     const userText = useLang('text', 'user');
     const roleText = useLang('text', 'role');
     const permissionText = useLang('text', 'permission');
@@ -51,15 +52,15 @@ export function BottomNavbar() {
 
     return (
         <div className="bg-background/60 sticky bottom-0 left-0 z-50 w-full border-t backdrop-blur-lg md:hidden">
-            <div className="mx-auto flex h-16 max-w-md items-center justify-around px-4">
+            <div className="mx-auto flex h-16 max-w-md items-center justify-around gap-2 px-4">
                 <BottomNavItem
                     href="/dashboard"
-                    icon={<LayoutGrid className={cn('size-6')} />}
-                    label="Home"
+                    icon={<LayoutGrid className={cn('size-5')} />}
+                    label={dashboardText}
                     isActive={route().current('dashboard')}
                 />
-                <BottomNavItem href="/transactions" icon={<ArrowUpDown className={cn('size-6')} />} label="Transaction" />
-                <BottomNavItem href="/transactions" icon={<Wallet className={cn('size-6')} />} label="Dompet & Asset" />
+                <BottomNavItem href="/transactions" icon={<ArrowUpDown className={cn('size-5')} />} label="Transaksi" />
+                <BottomNavItem href="/transactions" icon={<Wallet className={cn('size-5')} />} label="Dompet & Asset" />
                 {hasAdminMenu && (
                     <DropdownMenu modal={false}>
                         <DropdownMenuTrigger asChild>
@@ -69,7 +70,12 @@ export function BottomNavbar() {
                                     menuActive ? 'text-primary' : 'text-muted-foreground hover:text-primary',
                                 )}
                             >
-                                <div className={cn('flex size-5 items-center justify-center rounded-full', menuActive && 'fill-primary/20')}>
+                                <div
+                                    className={cn(
+                                        'flex w-full items-center justify-center rounded-full p-1',
+                                        menuActive && 'fill-primary/20 bg-primary/20',
+                                    )}
+                                >
                                     <Ellipsis className="size-5" />
                                 </div>
                                 <span className="line-clamp-1 text-center text-xs">Lainnya</span>
@@ -116,7 +122,7 @@ export function BottomNavbar() {
 
                 <BottomNavItem
                     href="/profiles/profile"
-                    icon={<User className={cn('size-6')} />}
+                    icon={<User className={cn('size-5')} />}
                     label="Profil"
                     isActive={route().current('profile.*')}
                 />
