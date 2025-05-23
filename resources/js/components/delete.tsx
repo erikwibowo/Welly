@@ -13,12 +13,14 @@ export default function Delete({
     description,
     routes,
     id,
+    type,
 }: {
     title: string;
     permissions: string[];
     description: string;
     routes: string;
     id: number;
+    type?: 'dropdown' | 'modal';
 }) {
     const [open, setOpen] = useState(false);
 
@@ -41,14 +43,22 @@ export default function Delete({
             onOpenChange={setOpen}
             title={deleteText + ' ' + title}
             trigger={
-                usePermission(permissions) && (
+                usePermission(permissions) &&
+                (type === 'modal' ? (
+                    <Button
+                        variant="destructive"
+                        className="!text-destructive bg-destructive/20 hover:!bg-destructive/20 hover:!text-destructive flex w-full items-center justify-start rounded-none"
+                    >
+                        <TrashIcon className="icon-destructive" /> {deleteText}
+                    </Button>
+                ) : (
                     <DropdownMenuItem
                         onSelect={(e) => e.preventDefault()}
                         className="!text-destructive hover:!bg-destructive/20 hover:!text-destructive"
                     >
                         <TrashIcon className="icon-destructive" /> {deleteText}
                     </DropdownMenuItem>
-                )
+                ))
             }
             submit={submit}
             footer={

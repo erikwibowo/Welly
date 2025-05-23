@@ -10,7 +10,7 @@ import { useForm } from '@inertiajs/react';
 import { Loader2, PencilIcon, SaveIcon } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
-export default function Edit({ title, asset }: { title: string; asset: App.Models.Asset }) {
+export default function Edit({ title, asset, type }: { title: string; asset: App.Models.Asset; type?: 'dropdown' | 'modal' }) {
     const [open, setOpen] = useState(false);
 
     const { data, setData, put, processing, errors, clearErrors, reset } = useForm({
@@ -44,11 +44,16 @@ export default function Edit({ title, asset }: { title: string; asset: App.Model
             onClose={() => closeModal()}
             title={editText + ' ' + title}
             trigger={
-                usePermission(['asset update']) && (
+                usePermission(['asset update']) &&
+                (type == 'modal' ? (
+                    <Button className="flex w-full items-center justify-start" variant="ghost">
+                        <PencilIcon className="icon" /> {editText}
+                    </Button>
+                ) : (
                     <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                         <PencilIcon className="icon" /> {editText}
                     </DropdownMenuItem>
-                )
+                ))
             }
             submit={submit}
             footer={
