@@ -79,6 +79,17 @@ declare namespace App.Models {
     users?: App.Models.User[]
     permissions?: any[]
   }
+  export interface Asset {
+    id: number
+    user_id: number
+    name: string
+    owner: string
+    initial_value: number
+    deleted_at?: string
+    created_at?: string
+    updated_at?: string
+    user?: App.Models.User
+  }
 }
 
 declare namespace App {

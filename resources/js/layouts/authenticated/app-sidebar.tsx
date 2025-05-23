@@ -8,7 +8,7 @@ import { useLang } from '@/hooks/use-lang';
 import { usePermission } from '@/hooks/use-permission';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, KeyIcon, LayoutGrid, Settings2, ShieldIcon, Users2Icon } from 'lucide-react';
+import { BookOpen, Database, Folder, KeyIcon, LayoutGrid, ShieldIcon, Users2Icon, Wallet } from 'lucide-react';
 
 export function AppSidebar() {
     const mainNavItems: NavItem[] = [
@@ -17,6 +17,14 @@ export function AppSidebar() {
             href: 'dashboard',
             icon: LayoutGrid,
             permission: null,
+        },
+    ];
+    const masterNavItems: NavItem[] = [
+        {
+            title: 'Aset & Dompet',
+            href: 'asset.index',
+            icon: Wallet,
+            permission: 'asset read',
         },
     ];
     const accessNavItems: NavItem[] = [
@@ -69,6 +77,9 @@ export function AppSidebar() {
             </SidebarHeader>
             <SidebarContent className="py-1">
                 <NavMain items={mainNavItems} />
+                {usePermission(masterNavItems.map((item) => item.permission).filter((permission): permission is string => !!permission)) && (
+                    <NavCollapsible label="Master Data" Icon={Database} items={masterNavItems} />
+                )}
                 <NavMain
                     labelGroup={
                         usePermission(accessNavItems.map((item) => item.permission).filter((permission): permission is string => !!permission))
@@ -77,9 +88,6 @@ export function AppSidebar() {
                     }
                     items={accessNavItems}
                 />
-                {usePermission(accessNavItems.map((item) => item.permission).filter((permission): permission is string => !!permission)) && (
-                    <NavCollapsible label={accessText} Icon={Settings2} items={accessNavItems} />
-                )}
             </SidebarContent>
 
             <SidebarFooter>

@@ -50,6 +50,8 @@ export function BottomNavbar() {
     const hasSettingRead = usePermission(['setting read']);
     const menuActive = route().current('user.*') || route().current('role.*') || route().current('permission.*') || route().current('setting.*');
 
+    const hasAsetMenu = usePermission(['asset read']);
+
     return (
         <div className="bg-background/60 sticky bottom-0 left-0 z-50 w-full border-t backdrop-blur-lg md:hidden">
             <div className="mx-auto flex h-16 max-w-md items-center justify-around gap-2 px-4">
@@ -60,7 +62,14 @@ export function BottomNavbar() {
                     isActive={route().current('dashboard')}
                 />
                 <BottomNavItem href="/transactions" icon={<ArrowUpDown className={cn('size-5')} />} label="Transaksi" />
-                <BottomNavItem href="/transactions" icon={<Wallet className={cn('size-5')} />} label="Dompet & Asset" />
+                {hasAsetMenu && (
+                    <BottomNavItem
+                        href={route('asset.index')}
+                        icon={<Wallet className={cn('size-5')} />}
+                        label="Dompet & Asset"
+                        isActive={route().current('asset.*')}
+                    />
+                )}
                 {hasAdminMenu && (
                     <DropdownMenu modal={false}>
                         <DropdownMenuTrigger asChild>
