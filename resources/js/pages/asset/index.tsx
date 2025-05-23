@@ -204,37 +204,27 @@ export default function Index({ title, filters, assets }: { title: string; filte
                 <Pagination className="hidden md:flex" data={assets} />
                 <div className="-mt-8 md:hidden">
                     {assets.data.map((asset) => (
-                        <div key={asset.id} className="relative flex items-center justify-between gap-2 border-b p-4 last:border-0">
-                            <div className="flex w-full items-center gap-2">
-                                <div className="flex w-full flex-col">
-                                    <p className="font-medium">{asset.name}</p>
-                                    <p>{asset.owner}</p>
+                        <DropdownMenu modal={false}>
+                            <DropdownMenuTrigger asChild>
+                                <div key={asset.id} className="flex items-center justify-between gap-2 border-b p-4 last:border-0">
+                                    <div className="flex w-full items-center gap-2">
+                                        <div className="flex w-full flex-col">
+                                            <p className="font-medium">{asset.name}</p>
+                                            <p>{asset.owner}</p>
+                                        </div>
+                                    </div>
+                                    <p className="text-right">{numberFormat(asset.initial_value)}</p>
                                 </div>
-                            </div>
-                            <p className="text-right">{numberFormat(asset.initial_value)}</p>
-                            <DropdownMenu modal={false}>
-                                <DropdownMenuTrigger asChild className="absolute top-0 right-0">
-                                    <Button variant="ghost" size="icon">
-                                        <EllipsisIcon className="icon" />
-                                        <span className="sr-only">{actionColumnLang}</span>
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>
-                                        <p className="max-w-40 truncate font-semibold">{asset.name}</p>
-                                    </DropdownMenuLabel>
-                                    <Separator className="my-1" />
-                                    <Edit title={title} asset={asset} />
-                                    <Delete
-                                        title={title}
-                                        permissions={['asset delete']}
-                                        routes="asset.destroy"
-                                        description={asset.name}
-                                        id={asset.id}
-                                    />
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="center">
+                                <DropdownMenuLabel>
+                                    <p className="max-w-40 truncate font-semibold">{asset.name}</p>
+                                </DropdownMenuLabel>
+                                <Separator className="my-1" />
+                                <Edit title={title} asset={asset} />
+                                <Delete title={title} permissions={['asset delete']} routes="asset.destroy" description={asset.name} id={asset.id} />
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     ))}
                 </div>
             </div>
