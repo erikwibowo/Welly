@@ -6,7 +6,7 @@ export function UserInfo({ user, showEmail = false }: { user: App.Models.User; s
 
     return (
         <>
-            <Avatar className="h-8 w-8 overflow-hidden rounded-md">
+            <Avatar className="h-8 w-8 overflow-hidden rounded-md border">
                 <AvatarImage src={user.full_path_image} alt={user.name} />
                 <AvatarFallback className="rounded-md bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                     {getInitials(user.name)}
