@@ -50,9 +50,9 @@ export default function Dashboard({ title }: { title: string }) {
                                         format(date.from, 'LLL dd, y')
                                     )
                                 ) : (
-                                    <span>Pick a date</span>
+                                    <span>Pilih Tanggal</span>
                                 )}
-                                <CalendarIcon className="icon" />
+                                <CalendarIcon className="text-muted-foreground/60 size-4" />
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">

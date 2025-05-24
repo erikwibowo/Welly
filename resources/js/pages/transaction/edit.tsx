@@ -10,8 +10,13 @@ import { useLang } from '@/hooks/use-lang';
 import { usePermission } from '@/hooks/use-permission';
 import { useForm } from '@inertiajs/react';
 import axios from 'axios';
-import { Loader2, PencilIcon, SaveIcon } from 'lucide-react';
+import { addHours, format } from 'date-fns';
+import { CalendarIcon, Loader2, PencilIcon, SaveIcon } from 'lucide-react';
 import { FormEventHandler, useEffect, useState } from 'react';
+
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 export default function Edit({
     title,
@@ -27,19 +32,27 @@ export default function Edit({
     const [open, setOpen] = useState(false);
     const [categories, setCategories] = useState<App.Models.Category[]>([]);
 
-    const { data, setData, put, processing, errors, clearErrors, reset } = useForm({
-        type: transaction.type,
-        category_id: transaction.category_id,
+    const { data, setData, put, processing, errors, clearErrors, reset } = useForm<{
+        type: 'income' | 'expense' | 'transfer';
+        category_id: number | null;
+        from_asset_id: number;
+        to_asset_id: number | null;
+        date: Date;
+        amount: number;
+        note: string;
+    }>({
+        type: transaction.type as 'income' | 'expense' | 'transfer',
+        category_id: transaction.category_id ?? null,
         from_asset_id: transaction.from_asset_id,
-        to_asset_id: transaction.to_asset_id,
-        date: transaction.date,
+        to_asset_id: transaction.to_asset_id ?? null,
+        date: new Date(transaction.date),
         amount: transaction.amount,
         note: transaction.note ?? '',
     });
 
     useEffect(() => {
         if (data.type) {
-            setData('category_id', transaction.category_id);
+            setData('category_id', transaction.category_id ?? null);
             setCategories([]);
             axios
                 .get(route('category.get-category'), {
@@ -105,7 +118,7 @@ export default function Edit({
                     <Label htmlFor="type">Jenis</Label>
                     <Select
                         onValueChange={(value) => {
-                            setData('type', value);
+                            setData('type', value as 'income' | 'expense' | 'transfer');
                         }}
                         value={String(data.type)}
                     >
@@ -205,20 +218,38 @@ export default function Edit({
                 </div>
                 <div className="grid gap-2">
                     <Label htmlFor="date">Tanggal</Label>
-                    <Input
-                        id="date"
-                        name="date"
-                        type="date"
-                        value={data.date}
-                        className="block w-full"
-                        autoComplete="date"
-                        aria-invalid={!!errors.date}
-                        placeholder="Tanggal"
-                        onChange={(e) => setData('date', e.target.value)}
-                    />
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant={'outline'}
+                                className={cn('w-full justify-between text-left font-normal', !data.date && 'text-muted-foreground')}
+                            >
+                                {data.date ? format(data.date, 'PPP') : <span>Pilih Tanggal</span>}
+                                <CalendarIcon className="text-muted-foreground/60 size-4" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                            <Calendar
+                                mode="single"
+                                selected={data.date}
+                                onSelect={(date) => {
+                                    if (date) {
+                                        setData('date', addHours(date, 7));
+                                    } else {
+                                        setData('date', new Date(transaction.date));
+                                    }
+                                }}
+                                disabled={(date) => date > addHours(new Date(), 7)}
+                                initialFocus={true}
+                                defaultMonth={new Date(data.date)}
+                            />
+                        </PopoverContent>
+                    </Popover>
 
                     <InputError message={errors.date} />
                 </div>
+
+                <InputError message={errors.date} />
                 <div className="grid gap-2">
                     <Label htmlFor="note">Catatan</Label>
                     <Textarea

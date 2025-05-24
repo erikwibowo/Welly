@@ -22,9 +22,9 @@ class TransactionUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['required', 'exists:categories,id'],
-            'from_asset_id' => ['required_unless:type,transfer', 'exists:assets,id'],
-            'to_asset_id' => ['required_if:type,transfer', 'exists:assets,id'],
+            'category_id' => ['required'],
+            'from_asset_id' => ['required_unless:type,transfer'],
+            'to_asset_id' => ['required_if:type,transfer'],
             'type' => ['required', 'string', 'in:income,expense,transfer'],
             'date' => ['required', 'date'],
             'amount' => ['required', 'numeric'],

@@ -10,20 +10,34 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { usePermission } from '@/hooks/use-permission';
 import { useForm } from '@inertiajs/react';
 import axios from 'axios';
-import { Loader2, Plus, SaveIcon } from 'lucide-react';
+import { addHours, format } from 'date-fns';
+import { CalendarIcon, Loader2, Plus, SaveIcon } from 'lucide-react';
+import * as React from 'react';
 import { useEffect, useState } from 'react';
+
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 export default function Create({ title, froms, tos }: { title: string; froms: App.Models.Asset[]; tos: App.Models.Asset[] }) {
     const [open, setOpen] = useState(false);
     const [categories, setCategories] = useState<App.Models.Category[]>([]);
     const isMobile = useIsMobile();
 
-    const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
+    const { data, setData, post, processing, errors, clearErrors, reset } = useForm<{
+        type: 'income' | 'expense' | 'transfer';
+        category_id: string;
+        from_asset_id: string;
+        to_asset_id: string;
+        date: Date;
+        amount: number;
+        note: string;
+    }>({
         type: 'income',
         category_id: '',
         from_asset_id: '',
         to_asset_id: '',
-        date: new Date().toISOString().split('T')[0],
+        date: new Date(),
         amount: 0,
         note: '',
     });
@@ -101,7 +115,7 @@ export default function Create({ title, froms, tos }: { title: string; froms: Ap
                     <Label htmlFor="type">Jenis</Label>
                     <Select
                         onValueChange={(value) => {
-                            setData('type', value);
+                            setData('type', value as 'income' | 'expense' | 'transfer');
                         }}
                         value={String(data.type)}
                     >
@@ -201,17 +215,44 @@ export default function Create({ title, froms, tos }: { title: string; froms: Ap
                 </div>
                 <div className="grid gap-2">
                     <Label htmlFor="date">Tanggal</Label>
-                    <Input
-                        id="date"
-                        name="date"
-                        type="date"
-                        value={data.date}
-                        className="block w-full"
-                        autoComplete="date"
-                        aria-invalid={!!errors.date}
-                        placeholder="Tanggal"
-                        onChange={(e) => setData('date', e.target.value)}
-                    />
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant={'outline'}
+                                className={cn('w-full justify-between text-left font-normal', !data.date && 'text-muted-foreground')}
+                            >
+                                {data.date ? format(data.date, 'PPP') : <span>Pilih Tanggal</span>}
+                                <CalendarIcon className="text-muted-foreground/60 size-4" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                            <Calendar
+                                captionLayout="dropdown"
+                                toYear={new Date().getFullYear()}
+                                fromYear={2025}
+                                classNames={{
+                                    day_hidden: 'invisible',
+                                    dropdown:
+                                        'px-2 py-1.5 rounded-md bg-popover text-popover-foreground text-sm  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background',
+                                    caption_dropdowns: 'flex gap-3',
+                                    vhidden: 'hidden',
+                                    caption_label: 'hidden',
+                                }}
+                                initialFocus
+                                mode="single"
+                                selected={data.date}
+                                onSelect={(date) => {
+                                    if (date) {
+                                        setData('date', addHours(date, 7));
+                                    } else {
+                                        setData('date', addHours(new Date(), 7));
+                                    }
+                                }}
+                                disabled={(date) => date > addHours(new Date(), 7)}
+                                defaultMonth={new Date(data.date)}
+                            />
+                        </PopoverContent>
+                    </Popover>
 
                     <InputError message={errors.date} />
                 </div>

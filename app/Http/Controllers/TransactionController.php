@@ -6,6 +6,7 @@ use App\Http\Requests\Transaction\TransactionStoreRequest;
 use App\Http\Requests\Transaction\TransactionUpdateRequest;
 use App\Models\Asset;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -69,7 +70,7 @@ class TransactionController extends Controller implements HasMiddleware
                 'from_asset_id' => $request->from_asset_id,
                 'to_asset_id' => $request->type != 'transfer' ? null : $request->to_asset_id,
                 'type' => $request->type,
-                'date' => $request->date,
+                'date' => Carbon::parse($request->date)->format('Y-m-d'),
                 'amount' => $request->amount,
                 'note' => $request->note,
             ]);
@@ -107,7 +108,7 @@ class TransactionController extends Controller implements HasMiddleware
                 'from_asset_id' => $request->from_asset_id,
                 'to_asset_id' => $request->type != 'transfer' ? null : $request->to_asset_id,
                 'type' => $request->type,
-                'date' => $request->date,
+                'date' => Carbon::parse($request->date)->format('Y-m-d'),
                 'amount' => $request->amount,
                 'note' => $request->note,
             ]);
