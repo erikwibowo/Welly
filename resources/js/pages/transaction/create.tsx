@@ -30,7 +30,7 @@ export default function Create({ title, froms, tos }: { title: string; froms: Ap
         from_asset_id: string;
         to_asset_id: string;
         date: Date;
-        amount: number;
+        amount: string;
         note: string;
     }>({
         type: 'income',
@@ -38,7 +38,7 @@ export default function Create({ title, froms, tos }: { title: string; froms: Ap
         from_asset_id: '',
         to_asset_id: '',
         date: new Date(),
-        amount: 0,
+        amount: '',
         note: '',
     });
 
@@ -203,12 +203,13 @@ export default function Create({ title, froms, tos }: { title: string; froms: Ap
                         id="amount"
                         name="amount"
                         type="number"
+                        inputMode="numeric"
                         value={data.amount}
                         className="block w-full"
                         autoComplete="amount"
                         aria-invalid={!!errors.amount}
                         placeholder="Nominal"
-                        onChange={(e) => setData('amount', Number(e.target.value))}
+                        onChange={(e) => setData('amount', e.target.value)}
                     />
 
                     <InputError message={errors.amount} />

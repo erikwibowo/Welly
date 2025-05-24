@@ -206,6 +206,7 @@ export default function Edit({
                         id="amount"
                         name="amount"
                         type="number"
+                        inputMode="numeric"
                         value={data.amount}
                         className="block w-full"
                         autoComplete="amount"

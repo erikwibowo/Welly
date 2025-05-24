@@ -28,7 +28,7 @@ class TransactionUpdateRequest extends FormRequest
             'type' => ['required', 'string', 'in:income,expense,transfer'],
             'date' => ['required', 'date'],
             'amount' => ['required', 'numeric'],
-            'note' => ['nullable', 'string'],
+            'note' => ['required', 'string'],
         ];
     }
 }

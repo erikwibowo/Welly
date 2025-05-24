@@ -184,7 +184,10 @@ export default function Index({
                                     />
                                 </TableCell>
                                 <TableHead>{numberFormat(transactions.from + index)}</TableHead>
-                                <TableCell className="font-medium">{transaction.type_view}</TableCell>
+                                <TableCell className="font-medium">
+                                    {transaction.type_view} <br />
+                                    <small>{transaction.note ?? '-'}</small>
+                                </TableCell>
                                 <TableCell>{transaction.category?.name}</TableCell>
                                 <TableCell>
                                     {transaction.type !== 'transfer' ? (
