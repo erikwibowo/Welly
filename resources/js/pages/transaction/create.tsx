@@ -215,7 +215,7 @@ export default function Create({ title, froms, tos }: { title: string; froms: Ap
                 </div>
                 <div className="grid gap-2">
                     <Label htmlFor="date">Tanggal</Label>
-                    <Popover>
+                    <Popover modal={true}>
                         <PopoverTrigger asChild>
                             <Button
                                 variant={'outline'}

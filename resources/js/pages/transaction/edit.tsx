@@ -218,7 +218,7 @@ export default function Edit({
                 </div>
                 <div className="grid gap-2">
                     <Label htmlFor="date">Tanggal</Label>
-                    <Popover>
+                    <Popover modal={true}>
                         <PopoverTrigger asChild>
                             <Button
                                 variant={'outline'}
