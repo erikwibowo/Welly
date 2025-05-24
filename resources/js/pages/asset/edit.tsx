@@ -102,15 +102,17 @@ export default function Edit({ title, asset, type }: { title: string; asset: App
                     <InputError message={errors.owner} />
                 </div>
                 <div className="grid gap-2">
-                    <Label htmlFor="initial_value">Nilai</Label>
+                    <Label htmlFor="initial_value">Nilai Awal</Label>
                     <Input
                         id="initial_value"
                         name="initial_value"
+                        type="number"
+                        inputMode="numeric"
                         value={data.initial_value}
                         className="block w-full"
                         autoComplete="initial_value"
                         aria-invalid={!!errors.initial_value}
-                        placeholder="Nilai"
+                        placeholder="Nilai Awal"
                         onChange={(e) => setData('initial_value', Number(e.target.value))}
                     />
 

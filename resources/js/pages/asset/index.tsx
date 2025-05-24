@@ -151,6 +151,9 @@ export default function Index({ title, filters, assets }: { title: string; filte
                             <SortableTableHead field={filters.field} onSort={() => handleSort('initial_value')}>
                                 Nilai Awal
                             </SortableTableHead>
+                            <SortableTableHead field={filters.field} onSort={() => handleSort('note')}>
+                                Catatan
+                            </SortableTableHead>
                             <SortableTableHead field={filters.field} onSort={() => handleSort('created_at')}>
                                 {useLang('column', 'date')}
                             </SortableTableHead>
@@ -172,6 +175,7 @@ export default function Index({ title, filters, assets }: { title: string; filte
                                 <TableCell className="font-medium">{asset.name}</TableCell>
                                 <TableCell>{asset.owner}</TableCell>
                                 <TableCell className="text-right">{numberFormat(asset.initial_value)}</TableCell>
+                                <TableCell>{asset.note ?? '-'}</TableCell>
                                 <TableCell>{dateFormat(asset.created_at || '')}</TableCell>
                                 <TableCell className="text-right">
                                     <DropdownMenu modal={false}>

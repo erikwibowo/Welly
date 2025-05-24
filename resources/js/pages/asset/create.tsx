@@ -18,7 +18,7 @@ export default function Create({ title }: { title: string }) {
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         name: '',
         owner: '',
-        initial_value: 0,
+        initial_value: '',
         note: '',
     });
 
@@ -102,16 +102,18 @@ export default function Create({ title }: { title: string }) {
                     <InputError message={errors.owner} />
                 </div>
                 <div className="grid gap-2">
-                    <Label htmlFor="initial_value">Nilai</Label>
+                    <Label htmlFor="initial_value">Nilai Awal</Label>
                     <Input
                         id="initial_value"
                         name="initial_value"
+                        type="number"
+                        inputMode="numeric"
                         value={data.initial_value}
                         className="block w-full"
                         autoComplete="initial_value"
                         aria-invalid={!!errors.initial_value}
-                        placeholder="Nilai"
-                        onChange={(e) => setData('initial_value', Number(e.target.value))}
+                        placeholder="Nilai Awal"
+                        onChange={(e) => setData('initial_value', e.target.value)}
                     />
 
                     <InputError message={errors.initial_value} />
