@@ -23,6 +23,9 @@ class AssetUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'owner' => ['required', 'string', 'max:255'],
+            'initial_value' => ['required', 'numeric'],
+            'note' => ['nullable', 'string'],
         ];
     }
 }

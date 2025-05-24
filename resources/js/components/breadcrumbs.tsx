@@ -15,7 +15,9 @@ export function Breadcrumbs({ breadcrumbs }: { breadcrumbs: BreadcrumbItemType[]
                                 <Fragment key={index}>
                                     <BreadcrumbItem>
                                         {isLast ? (
-                                            <BreadcrumbPage>{item.title}</BreadcrumbPage>
+                                            <BreadcrumbPage className="font-medium tracking-wide uppercase md:font-normal md:tracking-normal md:capitalize">
+                                                {item.title}
+                                            </BreadcrumbPage>
                                         ) : (
                                             <BreadcrumbLink asChild>
                                                 <Link href={route(item.href)}>{item.title}</Link>

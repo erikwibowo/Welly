@@ -35,5 +35,10 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'asset update', 'guard_name' => 'web']);
         Permission::create(['name' => 'asset read', 'guard_name' => 'web']);
         Permission::create(['name' => 'asset create', 'guard_name' => 'web']);
+
+        Permission::create(['name' => 'category delete', 'guard_name' => 'web']);
+        Permission::create(['name' => 'category update', 'guard_name' => 'web']);
+        Permission::create(['name' => 'category read', 'guard_name' => 'web']);
+        Permission::create(['name' => 'category create', 'guard_name' => 'web']);
     }
 }

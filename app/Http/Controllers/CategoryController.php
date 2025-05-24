@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Asset\AssetStoreRequest;
-use App\Http\Requests\Asset\AssetUpdateRequest;
-use App\Models\Asset;
+use App\Http\Requests\Category\CategoryStoreRequest;
+use App\Http\Requests\Category\CategoryUpdateRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -12,16 +12,16 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class AssetController extends Controller implements HasMiddleware
+class CategoryController extends Controller implements HasMiddleware
 {
 
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:asset create', only: ['create', 'store']),
-            new Middleware('permission:asset read', only: ['index']),
-            new Middleware('permission:asset update', only: ['update']),
-            new Middleware('permission:asset delete', only: ['destroy', 'destroyBulk']),
+            new Middleware('permission:category create', only: ['create', 'store']),
+            new Middleware('permission:category read', only: ['index']),
+            new Middleware('permission:category update', only: ['update']),
+            new Middleware('permission:category delete', only: ['destroy', 'destroyBulk']),
         ];
     }
     /**
@@ -36,14 +36,14 @@ class AssetController extends Controller implements HasMiddleware
             'field' => $request->field ?? '',
             'order' => $request->order ?? '',
         ];
-        $assets =  Asset::search($filters['q']);
+        $categories =  Category::search($filters['q']);
         if ($request->has(['field', 'order'])) {
-            $assets->orderBy($request->field, $request->order);
+            $categories->orderBy($request->field, $request->order);
         }
-        return Inertia::render('asset/index', [
-            'title' => 'Dompet & Aset',
+        return Inertia::render('category/index', [
+            'title' => 'Kategori',
             'filters' => $filters,
-            'assets' => $assets->paginate($filters['perpage'])->onEachSide(0)->appends('query', null)->withQueryString()
+            'categories' => $categories->paginate($filters['perpage'])->onEachSide(0)->appends('query', null)->withQueryString()
         ]);
     }
 
@@ -55,17 +55,15 @@ class AssetController extends Controller implements HasMiddleware
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AssetStoreRequest $request)
+    public function store(CategoryStoreRequest $request)
     {
         try {
-            $asset = Asset::create([
+            $category = Category::create([
                 'user_id' => auth()->id(),
                 'name' => $request->name,
-                'owner' => $request->owner,
-                'initial_value' => $request->initial_value,
-                'note' => $request->note,
+                'type' => $request->type,
             ]);
-            return back()->with(['type' => 'success', 'message' => __('app.banner.created', ['name' => $asset->name])]);
+            return back()->with(['type' => 'success', 'message' => __('app.banner.created', ['name' => $category->name])]);
         } catch (\Throwable $th) {
             return back()->with(['type' => 'destructive', 'message' => __('app.banner.error', ['error' => $th->getMessage()])]);
         }
@@ -74,7 +72,7 @@ class AssetController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      */
-    public function show(Asset $asset)
+    public function show(Category $category)
     {
         //
     }
@@ -82,7 +80,7 @@ class AssetController extends Controller implements HasMiddleware
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Asset $asset)
+    public function edit(Category $category)
     {
         //
     }
@@ -90,17 +88,15 @@ class AssetController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(AssetUpdateRequest $request, Asset $asset)
+    public function update(CategoryUpdateRequest $request, Category $category)
     {
         try {
-            $asset->update([
+            $category->update([
                 'user_id' => auth()->id(),
                 'name' => $request->name,
-                'owner' => $request->owner,
-                'initial_value' => $request->initial_value,
-                'note' => $request->note,
+                'type' => $request->type,
             ]);
-            return back()->with(['type' => 'success', 'message' => __('app.banner.updated', ['name' => $asset->name])]);
+            return back()->with(['type' => 'success', 'message' => __('app.banner.updated', ['name' => $category->name])]);
         } catch (\Throwable $th) {
             return back()->with(['type' => 'destructive', 'message' => __('app.banner.error', ['error' => $th->getMessage()])]);
         }
@@ -109,11 +105,11 @@ class AssetController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Asset $asset)
+    public function destroy(Category $category)
     {
         try {
-            $asset->delete();
-            return back()->with(['type' => 'success', 'message' => __('app.banner.deleted', ['name' => $asset->name])]);
+            $category->delete();
+            return back()->with(['type' => 'success', 'message' => __('app.banner.deleted', ['name' => $category->name])]);
         } catch (\Throwable $th) {
             DB::rollback();
             return back()->with(['type' => 'destructive', 'message' => __('app.banner.error', ['error' => $th->getMessage()])]);
@@ -124,8 +120,8 @@ class AssetController extends Controller implements HasMiddleware
     {
         DB::beginTransaction();
         try {
-            $assets = Asset::whereIn('id', $request->id);
-            $assets->delete();
+            $categories = Category::whereIn('id', $request->id);
+            $categories->delete();
             DB::commit();
             return back()->with(['type' => 'success', 'message' => __('app.banner.deleted', ['name' => count($request->id) . ' data'])]);
         } catch (\Throwable $th) {

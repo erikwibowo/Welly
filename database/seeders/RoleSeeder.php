@@ -36,6 +36,10 @@ class RoleSeeder extends Seeder
             'asset update',
             'asset read',
             'asset create',
+            'category delete',
+            'category update',
+            'category read',
+            'category create',
         ]);
         $admin = Role::create([
             'name'          => 'admin',

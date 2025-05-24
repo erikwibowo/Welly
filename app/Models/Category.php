@@ -6,16 +6,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
-class Asset extends Model
+class Category extends Model
 {
     use Searchable;
 
     protected $fillable = [
         'user_id',
         'name',
-        'owner',
-        'initial_value',
-        'note',
+        'type',
     ];
 
     /**
@@ -27,9 +25,7 @@ class Asset extends Model
     {
         return [
             'name' => $this->name,
-            'owner' => $this->owner,
-            'initial_value' => $this->initial_value,
-            'note' => $this->note,
+            'type' => $this->type,
         ];
     }
 

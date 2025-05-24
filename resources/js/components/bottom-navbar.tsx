@@ -10,7 +10,7 @@ import { useLang } from '@/hooks/use-lang';
 import { usePermission } from '@/hooks/use-permission';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
-import { ArrowUpDown, Ellipsis, Key, LayoutGrid, Settings, Shield, User, Users, Wallet } from 'lucide-react';
+import { ArrowUpDown, Ellipsis, Key, LayoutGrid, Settings, Shield, Tags, User, Users, Wallet } from 'lucide-react';
 import type * as React from 'react';
 
 interface BottomNavItemProps {
@@ -48,7 +48,13 @@ export function BottomNavbar() {
     const hasRoleRead = usePermission(['role read']);
     const hasPermissionRead = usePermission(['permission read']);
     const hasSettingRead = usePermission(['setting read']);
-    const menuActive = route().current('user.*') || route().current('role.*') || route().current('permission.*') || route().current('setting.*');
+    const hasCategoryRead = usePermission(['category read']);
+    const menuActive =
+        route().current('user.*') ||
+        route().current('role.*') ||
+        route().current('permission.*') ||
+        route().current('setting.*') ||
+        route().current('category.*');
 
     const hasAsetMenu = usePermission(['asset read']);
 
@@ -122,6 +128,14 @@ export function BottomNavbar() {
                                     <Link className="block w-full" href={route('setting.index')} as="button" prefetch>
                                         <Settings className="icon" />
                                         {settingText}
+                                    </Link>
+                                </DropdownMenuItem>
+                            )}
+                            {hasCategoryRead && (
+                                <DropdownMenuItem asChild>
+                                    <Link className="block w-full" href={route('category.index')} as="button" prefetch>
+                                        <Tags className="icon" />
+                                        Kategori
                                     </Link>
                                 </DropdownMenuItem>
                             )}

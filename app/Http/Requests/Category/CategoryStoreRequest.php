@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Asset;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AssetStoreRequest extends FormRequest
+class CategoryStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,7 @@ class AssetStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'owner' => ['required', 'string', 'max:255'],
-            'initial_value' => ['required', 'numeric'],
-            'note' => ['nullable', 'string'],
+            'type' => ['required', 'string', 'in:income,expense']
         ];
     }
 }

@@ -3,7 +3,7 @@ import ResponsiveDialog from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLang } from '@/hooks/use-lang';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { usePermission } from '@/hooks/use-permission';
@@ -17,14 +17,12 @@ export default function Create({ title }: { title: string }) {
 
     const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         name: '',
-        owner: '',
-        initial_value: 0,
-        note: '',
+        type: 'income',
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('asset.store'), {
+        post(route('category.store'), {
             onSuccess: () => {
                 closeModal();
             },
@@ -46,7 +44,7 @@ export default function Create({ title }: { title: string }) {
             onClose={() => closeModal()}
             title={createText + ' ' + title}
             trigger={
-                usePermission(['asset create']) &&
+                usePermission(['category create']) &&
                 (!isMobile ? (
                     <Button>
                         <Plus className="icon" /> {createText}
@@ -87,49 +85,22 @@ export default function Create({ title }: { title: string }) {
                     <InputError message={errors.name} />
                 </div>
                 <div className="grid gap-2">
-                    <Label htmlFor="owner">Pemilik</Label>
-                    <Input
-                        id="owner"
-                        name="owner"
-                        value={data.owner}
-                        className="block w-full"
-                        autoComplete="owner"
-                        aria-invalid={!!errors.owner}
-                        placeholder="Pemilik"
-                        onChange={(e) => setData('owner', e.target.value)}
-                    />
-
-                    <InputError message={errors.owner} />
-                </div>
-                <div className="grid gap-2">
-                    <Label htmlFor="initial_value">Nilai</Label>
-                    <Input
-                        id="initial_value"
-                        name="initial_value"
-                        value={data.initial_value}
-                        className="block w-full"
-                        autoComplete="initial_value"
-                        aria-invalid={!!errors.initial_value}
-                        placeholder="Nilai"
-                        onChange={(e) => setData('initial_value', Number(e.target.value))}
-                    />
-
-                    <InputError message={errors.initial_value} />
-                </div>
-                <div className="grid gap-2">
-                    <Label htmlFor="note">Catatan</Label>
-                    <Textarea
-                        id="note"
-                        name="note"
-                        value={data.note}
-                        className="block h-20 w-full"
-                        autoComplete="note"
-                        aria-invalid={!!errors.note}
-                        placeholder="Catatan"
-                        onChange={(e) => setData('note', e.target.value)}
-                    />
-
-                    <InputError message={errors.note} />
+                    <Label htmlFor="type">Jenis</Label>
+                    <Select
+                        onValueChange={(value) => {
+                            setData('type', value);
+                        }}
+                        value={String(data.type)}
+                    >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Per Page" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="income">Pemasukan</SelectItem>
+                            <SelectItem value="expense">Pengeluaran</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <InputError message={errors.type} />
                 </div>
             </div>
         </ResponsiveDialog>

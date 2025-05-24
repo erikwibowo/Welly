@@ -21,11 +21,11 @@ import { useEffect, useRef, useState } from 'react';
 import Create from './create';
 import Edit from './edit';
 
-export default function Index({ title, filters, assets }: { title: string; filters: Filter; assets: App.Paginate<App.Models.Asset> }) {
+export default function Index({ title, filters, categories }: { title: string; filters: Filter; categories: App.Paginate<App.Models.Category> }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: title,
-            href: 'asset.index',
+            href: 'category.index',
         },
     ];
     const isFirstRun = useRef(true);
@@ -67,7 +67,7 @@ export default function Index({ title, filters, assets }: { title: string; filte
     return (
         <TableLayout breadcrumbs={breadcrumbs}>
             <Head title={title} />
-            <div className="mx-auto w-full space-y-4 py-0 md:py-4">
+            <div className="mx-auto w-full space-y-4 py-4">
                 <div className="flex scroll-px-0.5 items-center justify-between gap-4 overflow-x-auto px-4">
                     <div className="flex items-center gap-2">
                         <Create title={title} />
@@ -131,25 +131,22 @@ export default function Index({ title, filters, assets }: { title: string; filte
                         </div>
                     </div>
                 </div>
-                <Empty show={assets.data.length === 0} />
-                <Table className={assets.data.length > 0 ? 'w-full' : 'hidden'}>
+                <Empty show={categories.data.length === 0} />
+                <Table className={categories.data.length > 0 ? 'w-full' : 'hidden'}>
                     <TableHeader>
                         <TableRow>
                             <TableHead>
                                 <Checkbox
-                                    checked={selected.length > 0 && selected.length === assets.data.length}
-                                    onCheckedChange={(value) => setSelected(value ? assets.data.map((asset) => asset.id) : [])}
+                                    checked={selected.length > 0 && selected.length === categories.data.length}
+                                    onCheckedChange={(value) => setSelected(value ? categories.data.map((category) => category.id) : [])}
                                 />
                             </TableHead>
                             <TableHead>#</TableHead>
                             <SortableTableHead field={filters.field} onSort={() => handleSort('name')}>
                                 {useLang('column', 'name')}
                             </SortableTableHead>
-                            <SortableTableHead field={filters.field} onSort={() => handleSort('owner')}>
-                                Pemilik
-                            </SortableTableHead>
-                            <SortableTableHead field={filters.field} onSort={() => handleSort('initial_value')}>
-                                Nilai Awal
+                            <SortableTableHead field={filters.field} onSort={() => handleSort('type')}>
+                                Jenis
                             </SortableTableHead>
                             <SortableTableHead field={filters.field} onSort={() => handleSort('created_at')}>
                                 {useLang('column', 'date')}
@@ -158,21 +155,20 @@ export default function Index({ title, filters, assets }: { title: string; filte
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {assets.data.map((asset, index) => (
-                            <TableRow key={asset.id} data-state={selected.includes(asset.id) ? 'selected' : ''}>
+                        {categories.data.map((category, index) => (
+                            <TableRow key={category.id} data-state={selected.includes(category.id) ? 'selected' : ''}>
                                 <TableCell>
                                     <Checkbox
-                                        checked={selected.includes(asset.id)}
+                                        checked={selected.includes(category.id)}
                                         onCheckedChange={(value) => {
-                                            setSelected((prev) => (value ? [...prev, asset.id] : prev.filter((id) => id !== asset.id)));
+                                            setSelected((prev) => (value ? [...prev, category.id] : prev.filter((id) => id !== category.id)));
                                         }}
                                     />
                                 </TableCell>
-                                <TableHead>{numberFormat(assets.from + index)}</TableHead>
-                                <TableCell className="font-medium">{asset.name}</TableCell>
-                                <TableCell>{asset.owner}</TableCell>
-                                <TableCell className="text-right">{numberFormat(asset.initial_value)}</TableCell>
-                                <TableCell>{dateFormat(asset.created_at || '')}</TableCell>
+                                <TableHead>{numberFormat(categories.from + index)}</TableHead>
+                                <TableCell className="font-medium">{category.name}</TableCell>
+                                <TableCell>{category.type === 'income' ? 'Pendapatan' : 'Pengeluaran'}</TableCell>
+                                <TableCell>{dateFormat(category.created_at || '')}</TableCell>
                                 <TableCell className="text-right">
                                     <DropdownMenu modal={false}>
                                         <DropdownMenuTrigger asChild>
@@ -183,16 +179,16 @@ export default function Index({ title, filters, assets }: { title: string; filte
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>
-                                                <p className="max-w-40 truncate font-semibold">{asset.name}</p>
+                                                <p className="max-w-40 truncate font-semibold">{category.name}</p>
                                             </DropdownMenuLabel>
                                             <Separator className="my-1" />
-                                            <Edit title={title} asset={asset} />
+                                            <Edit title={title} category={category} />
                                             <Delete
                                                 title={title}
-                                                permissions={['asset delete']}
-                                                routes="asset.destroy"
-                                                description={asset.name}
-                                                id={asset.id}
+                                                permissions={['category delete']}
+                                                routes="category.destroy"
+                                                description={category.name}
+                                                id={category.id}
                                             />
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -201,7 +197,7 @@ export default function Index({ title, filters, assets }: { title: string; filte
                         ))}
                     </TableBody>
                 </Table>
-                <Pagination data={assets} />
+                <Pagination data={categories} />
             </div>
         </TableLayout>
     );
