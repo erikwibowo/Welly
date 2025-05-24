@@ -68,7 +68,7 @@ export default function ResponsiveDialog({
         <Drawer
             repositionInputs={false}
             open={open}
-            autoFocus={open}
+            autoFocus={false}
             onOpenChange={() => {
                 handleClose();
                 setTimeout(() => (document.body.style.pointerEvents = ''), 100);
