@@ -19,3 +19,15 @@ export function dateFormat(value?: string) {
     }
     return value;
 }
+
+export function shortDateFormat(value?: string) {
+    if (value) {
+        const date = new Date(value);
+        return Intl.DateTimeFormat('id-ID', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+        }).format(date);
+    }
+    return value;
+}

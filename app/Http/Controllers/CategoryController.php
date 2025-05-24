@@ -129,4 +129,10 @@ class CategoryController extends Controller implements HasMiddleware
             return back()->with(['type' => 'destructive', 'message' => __('app.banner.error', ['error' => $th->getMessage()])]);
         }
     }
+
+    public function getCategory(Request $request)
+    {
+        $categories = Category::where('type', $request->type)->get();
+        return response()->json($categories);
+    }
 }

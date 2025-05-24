@@ -40,6 +40,10 @@ class RoleSeeder extends Seeder
             'category update',
             'category read',
             'category create',
+            'transaction delete',
+            'transaction update',
+            'transaction read',
+            'transaction create',
         ]);
         $admin = Role::create([
             'name'          => 'admin',

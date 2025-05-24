@@ -57,6 +57,7 @@ export function BottomNavbar() {
         route().current('category.*');
 
     const hasAsetMenu = usePermission(['asset read']);
+    const hasTransactionMenu = usePermission(['transaction read']);
 
     return (
         <div className="bg-background/60 sticky bottom-0 left-0 z-50 w-full border-t backdrop-blur-lg md:hidden">
@@ -67,7 +68,14 @@ export function BottomNavbar() {
                     label={dashboardText}
                     isActive={route().current('dashboard')}
                 />
-                <BottomNavItem href="/transactions" icon={<ArrowUpDown className={cn('size-5')} />} label="Transaksi" />
+                {hasTransactionMenu && (
+                    <BottomNavItem
+                        href={route('transaction.index')}
+                        icon={<ArrowUpDown className={cn('size-5')} />}
+                        label="Transaksi"
+                        isActive={route().current('transaction.*')}
+                    />
+                )}
                 {hasAsetMenu && (
                     <BottomNavItem
                         href={route('asset.index')}

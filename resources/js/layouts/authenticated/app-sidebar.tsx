@@ -8,7 +8,7 @@ import { useLang } from '@/hooks/use-lang';
 import { usePermission } from '@/hooks/use-permission';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Database, Folder, KeyIcon, LayoutGrid, ShieldIcon, Tags, Users2Icon, Wallet } from 'lucide-react';
+import { ArrowUpDown, BookOpen, Database, Folder, KeyIcon, LayoutGrid, ShieldIcon, Tags, Users2Icon, Wallet } from 'lucide-react';
 
 export function AppSidebar() {
     const mainNavItems: NavItem[] = [
@@ -31,6 +31,12 @@ export function AppSidebar() {
             href: 'category.index',
             icon: Tags,
             permission: 'category read',
+        },
+        {
+            title: 'Transaksi',
+            href: 'transaction.index',
+            icon: ArrowUpDown,
+            permission: 'transaction read',
         },
     ];
     const accessNavItems: NavItem[] = [

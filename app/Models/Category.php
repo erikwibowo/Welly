@@ -4,17 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
 class Category extends Model
 {
-    use Searchable;
+    use Searchable, SoftDeletes;
 
     protected $fillable = [
         'user_id',
         'name',
         'type',
     ];
+
+    protected $appends = [
+        'type_view'
+    ];
+
+    public function getTypeViewAttribute()
+    {
+        if ($this->attributes['type'] == 'income') {
+            return "Pemasukan";
+        } else if ($this->attributes['type'] == 'expense') {
+            return "Pengeluaran";
+        }
+    }
 
     /**
      * Get the indexable data array for the model.

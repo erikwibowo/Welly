@@ -12,7 +12,27 @@ declare namespace App.Models {
     deleted_at?: string
     created_at?: string
     updated_at?: string
+    type_view?: any
     user?: App.Models.User
+  }
+  export interface Transaction {
+    id: number
+    user_id: number
+    category_id?: number
+    from_asset_id: number
+    to_asset_id?: number
+    type: string
+    date: string
+    amount: number
+    note?: string
+    deleted_at?: string
+    created_at?: string
+    updated_at?: string
+    type_view?: any
+    user?: App.Models.User
+    category?: App.Models.Category
+    from?: App.Models.Asset
+    to?: App.Models.Asset
   }
   export interface User {
     id: number
