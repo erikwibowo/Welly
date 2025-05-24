@@ -1,14 +1,12 @@
 import AppLogo from '@/components/app-logo';
 import NavCollapsible from '@/components/nav-collapsible';
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { useLang } from '@/hooks/use-lang';
 import { usePermission } from '@/hooks/use-permission';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { ArrowUpDown, BookOpen, Database, Folder, KeyIcon, LayoutGrid, ShieldIcon, Tags, Users2Icon, Wallet } from 'lucide-react';
+import { ArrowUpDown, Database, KeyIcon, LayoutGrid, ShieldIcon, Tags, Users2Icon, Wallet } from 'lucide-react';
 
 export function AppSidebar() {
     const mainNavItems: NavItem[] = [
@@ -60,19 +58,6 @@ export function AppSidebar() {
         },
     ];
 
-    const footerNavItems: NavItem[] = [
-        {
-            title: 'Repository',
-            href: 'https://github.com/laravel/react-starter-kit',
-            icon: Folder,
-        },
-        {
-            title: 'Documentation',
-            href: 'https://laravel.com/docs/starter-kits',
-            icon: BookOpen,
-        },
-    ];
-
     const accessText = useLang('text', 'access');
     return (
         <Sidebar collapsible="icon" variant="sidebar">
@@ -101,11 +86,6 @@ export function AppSidebar() {
                     items={accessNavItems}
                 />
             </SidebarContent>
-
-            <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
-                <NavUser />
-            </SidebarFooter>
         </Sidebar>
     );
 }
