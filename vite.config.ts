@@ -21,7 +21,7 @@ export default defineConfig({
                 short_name: 'Welly',
                 description:
                     'Welly adalah sebuah pengelola keuangan pribadi yang dirancang untuk membantu Anda mengelola keuangan dengan lebih baik. Dengan fitur-fitur canggih dan antarmuka yang ramah pengguna, Welly memudahkan Anda untuk melacak pengeluaran, membuat anggaran, dan merencanakan masa depan keuangan Anda.',
-                theme_color: '#0b0809',
+                theme_color: '#06B6D4',
                 lang: 'id',
                 background_color: '#0b0809',
                 start_url: '/',
