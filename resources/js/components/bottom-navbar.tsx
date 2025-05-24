@@ -43,7 +43,7 @@ export function BottomNavbar() {
     const settingText = useLang('text', 'setting');
 
     // Call hooks unconditionally
-    const hasAdminMenu = usePermission(['user read', 'role read', 'permission read', 'setting read']);
+    const hasAdminMenu = usePermission(['user read', 'role read', 'permission read', 'setting read', 'category read']);
     const hasUserRead = usePermission(['user read']);
     const hasRoleRead = usePermission(['role read']);
     const hasPermissionRead = usePermission(['permission read']);
