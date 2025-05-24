@@ -1,10 +1,7 @@
-import { MinimalTiptapEditor } from '@/components/minimal-tiptap';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { Content } from '@tiptap/react';
-import { useState } from 'react';
 
 export default function Dashboard({ title }: { title: string }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -13,7 +10,6 @@ export default function Dashboard({ title }: { title: string }) {
             href: '/dashboard',
         },
     ];
-    const [value, setValue] = useState<Content>('');
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={title} />
@@ -29,16 +25,6 @@ export default function Dashboard({ title }: { title: string }) {
                         <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
                     </div>
                 </div>
-                <MinimalTiptapEditor
-                    value={value}
-                    onChange={setValue}
-                    className="h-[32rem] w-full overflow-y-auto"
-                    editorContentClassName="p-4"
-                    output="html"
-                    placeholder="Enter your description..."
-                    editable={true}
-                    editorClassName="focus:outline-hidden"
-                />
             </div>
         </AppLayout>
     );
