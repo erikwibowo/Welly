@@ -222,7 +222,11 @@ export default function Edit({
                         <PopoverTrigger asChild>
                             <Button
                                 variant={'outline'}
-                                className={cn('w-full justify-between text-left font-normal', !data.date && 'text-muted-foreground')}
+                                className={cn(
+                                    'dark:bg-input/30 border-input w-full justify-between border bg-transparent text-left font-normal',
+                                    'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+                                    !data.date && 'text-muted-foreground',
+                                )}
                             >
                                 {data.date ? format(data.date, 'PPP') : <span>Pilih Tanggal</span>}
                                 <CalendarIcon className="text-muted-foreground/60 size-4" />
@@ -240,7 +244,6 @@ export default function Edit({
                                     }
                                 }}
                                 disabled={(date) => date > addHours(new Date(), 7)}
-                                initialFocus={true}
                                 defaultMonth={new Date(data.date)}
                             />
                         </PopoverContent>

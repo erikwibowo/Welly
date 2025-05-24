@@ -219,7 +219,11 @@ export default function Create({ title, froms, tos }: { title: string; froms: Ap
                         <PopoverTrigger asChild>
                             <Button
                                 variant={'outline'}
-                                className={cn('w-full justify-between text-left font-normal', !data.date && 'text-muted-foreground')}
+                                className={cn(
+                                    'dark:bg-input/30 border-input w-full justify-between border bg-transparent text-left font-normal',
+                                    'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+                                    !data.date && 'text-muted-foreground',
+                                )}
                             >
                                 {data.date ? format(data.date, 'PPP') : <span>Pilih Tanggal</span>}
                                 <CalendarIcon className="text-muted-foreground/60 size-4" />
@@ -227,18 +231,6 @@ export default function Create({ title, froms, tos }: { title: string; froms: Ap
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0">
                             <Calendar
-                                captionLayout="dropdown"
-                                toYear={new Date().getFullYear()}
-                                fromYear={2025}
-                                classNames={{
-                                    day_hidden: 'invisible',
-                                    dropdown:
-                                        'px-2 py-1.5 rounded-md bg-popover text-popover-foreground text-sm  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background',
-                                    caption_dropdowns: 'flex gap-3',
-                                    vhidden: 'hidden',
-                                    caption_label: 'hidden',
-                                }}
-                                initialFocus
                                 mode="single"
                                 selected={data.date}
                                 onSelect={(date) => {

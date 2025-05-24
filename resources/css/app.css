@@ -198,7 +198,7 @@
 
     input[type='number']::-webkit-inner-spin-button,
     input[type='number']::-webkit-calendar-picker-indicator {
-        @apply dark:invert;
+        @apply hidden;
     }
 
     input[type='password']::-ms-reveal,

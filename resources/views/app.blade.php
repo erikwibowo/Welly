@@ -34,6 +34,9 @@
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
         <meta name="app-name" content="{{ $setting->app_name }}">
 
+        <link rel="manifest" href="/build/manifest.webmanifest" />
+        {{-- <meta name="theme-color" content="#f59e0b"> --}}
+
         <link rel="icon" type="image/png" href="{{ $setting->full_path_favicon }}">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
