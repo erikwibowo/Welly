@@ -19,10 +19,28 @@ const setCookie = (name: string, value: string, days = 365) => {
     document.cookie = `${name}=${value};path=/;max-age=${maxAge};SameSite=Lax`;
 };
 
+const updateMetaThemeColor = (isDark: boolean) => {
+    if (typeof document === 'undefined') return;
+
+    const darkColor = '#0b0809';
+    const lightColor = '#ffffff';
+
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'theme-color');
+        document.head.appendChild(meta);
+    }
+
+    meta.setAttribute('content', isDark ? darkColor : lightColor);
+};
+
 const applyTheme = (appearance: Appearance) => {
     const isDark = appearance === 'dark' || (appearance === 'system' && prefersDark());
 
     document.documentElement.classList.toggle('dark', isDark);
+
+    updateMetaThemeColor(isDark);
 };
 
 const mediaQuery = () => {
@@ -34,8 +52,8 @@ const mediaQuery = () => {
 };
 
 const handleSystemThemeChange = () => {
-    const currentAppearance = localStorage.getItem('appearance') as Appearance;
-    applyTheme(currentAppearance || 'system');
+    const currentAppearance = (localStorage.getItem('appearance') as Appearance) || 'system';
+    applyTheme(currentAppearance);
 };
 
 export function initializeTheme() {
@@ -43,7 +61,6 @@ export function initializeTheme() {
 
     applyTheme(savedAppearance);
 
-    // Add the event listener for system theme changes...
     mediaQuery()?.addEventListener('change', handleSystemThemeChange);
 }
 
@@ -53,20 +70,22 @@ export function useAppearance() {
     const updateAppearance = useCallback((mode: Appearance) => {
         setAppearance(mode);
 
-        // Store in localStorage for client-side persistence...
         localStorage.setItem('appearance', mode);
-
-        // Store in cookie for SSR...
         setCookie('appearance', mode);
 
         applyTheme(mode);
     }, []);
 
     useEffect(() => {
-        const savedAppearance = localStorage.getItem('appearance') as Appearance | null;
-        updateAppearance(savedAppearance || 'system');
+        const savedAppearance = (localStorage.getItem('appearance') as Appearance) || 'system';
+        updateAppearance(savedAppearance);
 
-        return () => mediaQuery()?.removeEventListener('change', handleSystemThemeChange);
+        const mq = mediaQuery();
+        mq?.addEventListener('change', handleSystemThemeChange);
+
+        return () => {
+            mq?.removeEventListener('change', handleSystemThemeChange);
+        };
     }, [updateAppearance]);
 
     return { appearance, updateAppearance } as const;
