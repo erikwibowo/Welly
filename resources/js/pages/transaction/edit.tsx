@@ -193,7 +193,7 @@ export default function Edit({
                             <SelectContent>
                                 {tos.map((to, index) => (
                                     <SelectItem key={index} value={String(to.id)}>
-                                        {to.name} - {to.initial_value}
+                                        {to.name} - {to.owner}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
