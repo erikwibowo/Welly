@@ -68,6 +68,9 @@ export interface Filter {
     q: string;
     field: string;
     order: string;
+    dateFrom?: Date | undefined;
+    dateTo?: Date | undefined;
+    date?: Date | undefined;
 }
 
 export interface Select {

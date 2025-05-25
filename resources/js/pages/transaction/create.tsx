@@ -10,7 +10,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { usePermission } from '@/hooks/use-permission';
 import { useForm } from '@inertiajs/react';
 import axios from 'axios';
-import { addHours, format } from 'date-fns';
+import { addHours } from 'date-fns';
 import { CalendarIcon, Loader2, Plus, SaveIcon } from 'lucide-react';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { shortDateFormat } from '@/utils/formatter';
 
 export default function Create({ title, froms, tos }: { title: string; froms: App.Models.Asset[]; tos: App.Models.Asset[] }) {
     const [open, setOpen] = useState(false);
@@ -226,7 +227,7 @@ export default function Create({ title, froms, tos }: { title: string; froms: Ap
                                     !data.date && 'text-muted-foreground',
                                 )}
                             >
-                                {data.date ? format(data.date, 'PPP') : <span>Pilih Tanggal</span>}
+                                {data.date ? shortDateFormat(data.date.toString()) : <span>Pilih Tanggal</span>}
                                 <CalendarIcon className="text-muted-foreground/60 size-4" />
                             </Button>
                         </PopoverTrigger>

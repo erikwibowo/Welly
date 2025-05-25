@@ -37,6 +37,8 @@ class TransactionController extends Controller implements HasMiddleware
             'q' => $request->q ?? '',
             'field' => $request->field ?? '',
             'order' => $request->order ?? '',
+            'dateFrom' => $request->dateFrom ?? now()->startOfMonth()->format('Y-m-d'),
+            'dateTo' => $request->dateTo ?? now()->lastOfMonth()->format('Y-m-d'),
         ];
         $transactions =  Transaction::search($filters['q']);
         if ($request->has(['field', 'order'])) {

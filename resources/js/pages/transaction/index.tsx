@@ -4,9 +4,11 @@ import Empty from '@/components/empty';
 import Pagination from '@/components/pagination';
 import SortableTableHead from '@/components/sortable-table-head';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -16,9 +18,11 @@ import { cn } from '@/lib/utils';
 import { BreadcrumbItem, Filter, SharedData } from '@/types';
 import { dateFormat, numberFormat, shortDateFormat } from '@/utils/formatter';
 import { Head, router, usePage } from '@inertiajs/react';
+import { addHours } from 'date-fns';
 import { debounce, pickBy } from 'lodash';
-import { ArrowRight, EllipsisIcon, EllipsisVerticalIcon, SearchIcon } from 'lucide-react';
+import { ArrowRight, CalendarIcon, EllipsisIcon, EllipsisVerticalIcon, SearchIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { DateRange } from 'react-day-picker';
 import Create from './create';
 import Edit from './edit';
 
@@ -42,12 +46,29 @@ export default function Index({
         },
     ];
     const isFirstRun = useRef(true);
-    const [filter, setFilter] = useState({
+
+    const now = new Date();
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    type FilterState = {
+        perpage: number;
+        q: string;
+        field: string;
+        order: string;
+        page: number;
+        dateFrom?: Date;
+        dateTo?: Date;
+    };
+
+    const [filter, setFilter] = useState<FilterState>({
         perpage: filters.perpage,
         q: filters.q,
         field: filters.field,
         order: filters.order,
         page: filters.page || 1,
+        dateFrom: filters.dateFrom ?? firstDayOfMonth,
+        dateTo: filters.dateTo ?? lastDayOfMonth,
     });
     const [selected, setSelected] = useState<number[]>([]);
     useEffect(() => {
@@ -105,6 +126,48 @@ export default function Index({
                         )}
                     </div>
                     <div className="flex items-center gap-2 py-1">
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    id="date"
+                                    variant={'outline'}
+                                    className={cn(
+                                        'dark:bg-input/30 border-input w-fit justify-between border bg-transparent text-left font-normal',
+                                        'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+                                        !filters.dateFrom && 'text-muted-foreground',
+                                    )}
+                                >
+                                    <span className="hidden sm:inline">
+                                        {filters.dateFrom ? (
+                                            filters.dateTo ? (
+                                                <>
+                                                    {shortDateFormat(addHours(filters.dateFrom, 7).toString())} -{' '}
+                                                    {shortDateFormat(addHours(filters.dateTo, 7).toString())}
+                                                </>
+                                            ) : (
+                                                shortDateFormat(addHours(filters.dateFrom, 7).toString())
+                                            )
+                                        ) : (
+                                            <span>Pilih Tanggal</span>
+                                        )}
+                                    </span>
+                                    <CalendarIcon className="text-muted-foreground/60 size-4" />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar
+                                    mode="range"
+                                    defaultMonth={filters.dateFrom}
+                                    selected={
+                                        {
+                                            from: new Date(filters.dateFrom || firstDayOfMonth),
+                                            to: new Date(filters.dateTo || lastDayOfMonth),
+                                        } as DateRange
+                                    }
+                                    numberOfMonths={2}
+                                />
+                            </PopoverContent>
+                        </Popover>
                         <Select
                             onValueChange={(value) => {
                                 setFilter((prev) => ({
