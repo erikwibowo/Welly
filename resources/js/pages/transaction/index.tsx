@@ -254,12 +254,12 @@ export default function Index({
                                 <TableCell>{transaction.category?.name}</TableCell>
                                 <TableCell>
                                     {transaction.type !== 'transfer' ? (
-                                        transaction.from?.name
+                                        transaction.from?.name + ' (' + transaction.from?.owner + ')'
                                     ) : (
                                         <span className="flex items-center gap-1">
-                                            {transaction.from?.name}
+                                            {transaction.from?.name} ({transaction.from?.owner})
                                             <ArrowRight className="icon" />
-                                            {transaction.to?.name}
+                                            {transaction.to?.name} ({transaction.to?.owner})
                                         </span>
                                     )}
                                 </TableCell>

@@ -22,7 +22,7 @@ class TransactionUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['required'],
+            'category_id' => ['required_unless:type,transfer'],
             'from_asset_id' => ['required_unless:type,transfer'],
             'to_asset_id' => ['required_if:type,transfer'],
             'type' => ['required', 'string', 'in:income,expense,transfer'],
