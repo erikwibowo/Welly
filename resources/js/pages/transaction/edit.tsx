@@ -171,7 +171,7 @@ export default function Edit({
                         <SelectContent>
                             {froms.map((from, index) => (
                                 <SelectItem key={index} value={String(from.id)}>
-                                    {from.name} - {from.initial_value}
+                                    {from.name} - {from.owner}
                                 </SelectItem>
                             ))}
                         </SelectContent>
