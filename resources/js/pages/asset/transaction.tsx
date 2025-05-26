@@ -20,17 +20,17 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
                     {numberFormat(
                         asset.transactions?.reduce((total: number, transaction: App.Models.Transaction) => {
                             if (transaction.type === 'expense') {
-                                return total - Number(transaction.amount);
+                                return Number(total) - Number(transaction.amount);
                             } else if (transaction.type === 'income') {
-                                return total + Number(transaction.amount);
+                                return Number(total) + Number(transaction.amount);
                             } else if (transaction.type === 'transfer') {
                                 if (transaction.from_asset_id === asset.id) {
-                                    return total - Number(transaction.amount);
+                                    return Number(total) - Number(transaction.amount);
                                 } else if (transaction.to_asset_id === asset.id) {
-                                    return total + Number(transaction.amount);
+                                    return Number(total) + Number(transaction.amount);
                                 }
                             }
-                            return total;
+                            return Number(total);
                         }, asset.initial_value) || asset.initial_value,
                     )}
                 </Button>
@@ -112,17 +112,17 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
                         {numberFormat(
                             asset.transactions?.reduce((total: number, transaction: App.Models.Transaction) => {
                                 if (transaction.type === 'expense') {
-                                    return total - Number(transaction.amount);
+                                    return Number(total) - Number(transaction.amount);
                                 } else if (transaction.type === 'income') {
-                                    return total + Number(transaction.amount);
+                                    return Number(total) + Number(transaction.amount);
                                 } else if (transaction.type === 'transfer') {
                                     if (transaction.from_asset_id === asset.id) {
-                                        return total - Number(transaction.amount);
+                                        return Number(total) - Number(transaction.amount);
                                     } else if (transaction.to_asset_id === asset.id) {
-                                        return total + Number(transaction.amount);
+                                        return Number(total) + Number(transaction.amount);
                                     }
                                 }
-                                return total;
+                                return Number(total);
                             }, asset.initial_value) || asset.initial_value,
                         )}
                     </p>
