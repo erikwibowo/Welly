@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { useLang } from '@/hooks/use-lang';
 import { cn } from '@/lib/utils';
 import { dateFormatWithDay, numberFormat } from '@/utils/formatter';
+import Decimal from 'decimal.js';
 import { ArrowDown, ArrowLeftRight, ArrowRight, ArrowUp } from 'lucide-react';
 import { useState } from 'react';
 
@@ -18,20 +19,26 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
             trigger={
                 <Button variant="link">
                     {numberFormat(
-                        asset.transactions?.reduce((total: number, transaction: App.Models.Transaction) => {
-                            if (transaction.type === 'expense') {
-                                return Number(total) - Number(transaction.amount);
-                            } else if (transaction.type === 'income') {
-                                return Number(total) + Number(transaction.amount);
-                            } else if (transaction.type === 'transfer') {
-                                if (transaction.from_asset_id === asset.id) {
-                                    return Number(total) - Number(transaction.amount);
-                                } else if (transaction.to_asset_id === asset.id) {
-                                    return Number(total) + Number(transaction.amount);
+                        asset.transactions?.reduce(
+                            (total: number, transaction: App.Models.Transaction) => {
+                                const currentTotal = new Decimal(total || 0);
+                                const transactionAmount = new Decimal(transaction.amount || 0);
+
+                                if (transaction.type === 'expense') {
+                                    return currentTotal.minus(transactionAmount).toNumber();
+                                } else if (transaction.type === 'income') {
+                                    return currentTotal.plus(transactionAmount).toNumber();
+                                } else if (transaction.type === 'transfer') {
+                                    if (transaction.from_asset_id === asset.id) {
+                                        return currentTotal.minus(transactionAmount).toNumber();
+                                    } else if (transaction.to_asset_id === asset.id) {
+                                        return currentTotal.plus(transactionAmount).toNumber();
+                                    }
                                 }
-                            }
-                            return Number(total);
-                        }, asset.initial_value) || asset.initial_value,
+                                return currentTotal.toNumber();
+                            },
+                            new Decimal(asset.initial_value || 0).toNumber(),
+                        ) || new Decimal(asset.initial_value || 0).toNumber(),
                     )}
                 </Button>
             }
@@ -110,20 +117,26 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
                     <h4 className="font-bold uppercase">Saldo AKhir</h4>
                     <p className="text-lg font-bold">
                         {numberFormat(
-                            asset.transactions?.reduce((total: number, transaction: App.Models.Transaction) => {
-                                if (transaction.type === 'expense') {
-                                    return Number(total) - Number(transaction.amount);
-                                } else if (transaction.type === 'income') {
-                                    return Number(total) + Number(transaction.amount);
-                                } else if (transaction.type === 'transfer') {
-                                    if (transaction.from_asset_id === asset.id) {
-                                        return Number(total) - Number(transaction.amount);
-                                    } else if (transaction.to_asset_id === asset.id) {
-                                        return Number(total) + Number(transaction.amount);
+                            asset.transactions?.reduce(
+                                (total: number, transaction: App.Models.Transaction) => {
+                                    const currentTotal = new Decimal(total || 0);
+                                    const transactionAmount = new Decimal(transaction.amount || 0);
+
+                                    if (transaction.type === 'expense') {
+                                        return currentTotal.minus(transactionAmount).toNumber();
+                                    } else if (transaction.type === 'income') {
+                                        return currentTotal.plus(transactionAmount).toNumber();
+                                    } else if (transaction.type === 'transfer') {
+                                        if (transaction.from_asset_id === asset.id) {
+                                            return currentTotal.minus(transactionAmount).toNumber();
+                                        } else if (transaction.to_asset_id === asset.id) {
+                                            return currentTotal.plus(transactionAmount).toNumber();
+                                        }
                                     }
-                                }
-                                return Number(total);
-                            }, asset.initial_value) || asset.initial_value,
+                                    return currentTotal.toNumber();
+                                },
+                                new Decimal(asset.initial_value || 0).toNumber(),
+                            ) || new Decimal(asset.initial_value || 0).toNumber(),
                         )}
                     </p>
                 </div>
