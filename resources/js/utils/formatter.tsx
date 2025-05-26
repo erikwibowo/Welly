@@ -31,3 +31,16 @@ export function shortDateFormat(value?: string) {
     }
     return value;
 }
+
+export function dateFormatWithDay(value?: string) {
+    if (value) {
+        const date = new Date(value);
+        return Intl.DateTimeFormat('id-ID', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+        }).format(date);
+    }
+    return value;
+}
