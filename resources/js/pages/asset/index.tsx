@@ -9,7 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigg
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useLang } from '@/hooks/use-lang';
 import TableLayout from '@/layouts/table-layout';
 import { cn } from '@/lib/utils';
@@ -23,7 +23,20 @@ import Create from './create';
 import Edit from './edit';
 import Transaction from './transaction';
 
-export default function Index({ title, filters, assets }: { title: string; filters: Filter; assets: App.Paginate<App.Models.Asset> }) {
+export default function Index({
+    title,
+    filters,
+    assets,
+    totals,
+}: {
+    title: string;
+    filters: Filter;
+    assets: App.Paginate<App.Models.Asset>;
+    totals: {
+        initial_value: number;
+        balance: number;
+    };
+}) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: title,
@@ -213,6 +226,16 @@ export default function Index({ title, filters, assets }: { title: string; filte
                             </TableRow>
                         ))}
                     </TableBody>
+                    <TableFooter>
+                        <TableRow className="font-semibold">
+                            <TableHead className="text-center" colSpan={4}>
+                                Total
+                            </TableHead>
+                            <TableHead className="text-right">{numberFormat(totals.initial_value)}</TableHead>
+                            <TableHead className="text-right">{numberFormat(totals.initial_value - totals.balance)}</TableHead>
+                            <TableHead colSpan={4}></TableHead>
+                        </TableRow>
+                    </TableFooter>
                 </Table>
                 <Pagination data={assets} />
             </div>

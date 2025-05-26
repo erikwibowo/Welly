@@ -43,6 +43,12 @@ class AssetController extends Controller implements HasMiddleware
         return Inertia::render('asset/index', [
             'title' => 'Dompet & Aset',
             'filters' => $filters,
+            'totals' => [
+                'initial_value' => Asset::sum('initial_value'),
+                'balance' => Asset::with(['transactionsFrom', 'transactionsTo'])->get()->sum(function ($asset) {
+                    return $asset->transactionsFrom->sum('amount') - $asset->transactionsTo->sum('amount');
+                }),
+            ],
             'assets' => $assets->query(function ($query) {
                 $query->with(['transactionsFrom.from', 'transactionsFrom.to', 'transactionsTo.from', 'transactionsTo.to']);
             })->paginate($filters['perpage'])->onEachSide(0)->appends('query', null)->withQueryString()
