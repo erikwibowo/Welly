@@ -209,7 +209,7 @@ export default function Index({
                     </div>
                 </div>
                 <Empty show={transactions.data.length === 0} />
-                <List title={title} froms={froms} tos={tos} transactions={transactions.data} />
+                <List className="md:hidden" title={title} froms={froms} tos={tos} transactions={transactions.data} />
                 <Table className={transactions.data.length > 0 ? 'hidden w-full md:inline-table' : 'hidden'}>
                     <TableHeader>
                         <TableRow>

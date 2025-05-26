@@ -10,18 +10,20 @@ import Edit from './edit';
 
 export default function List({
     title,
+    className,
     transactions,
     froms,
     tos,
 }: {
     title?: string;
+    className?: string;
     transactions: App.Models.Transaction[];
     froms?: App.Models.Asset[];
     tos?: App.Models.Asset[];
 }) {
     const actionColumnLang = useLang('column', 'action');
     return transactions?.map((transaction, index) => (
-        <div className="m-0 border-b px-4 py-2 last:border-none" key={index}>
+        <div className={cn('m-0 border-b px-4 py-2 last:border-none', className)} key={index}>
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <div
