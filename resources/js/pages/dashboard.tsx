@@ -1,7 +1,7 @@
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { format } from 'date-fns';
-import { ArrowDown, ArrowUp, Calendar as CalendarIcon, Wallet } from 'lucide-react';
+import { Head, Link } from '@inertiajs/react';
+import { addHours } from 'date-fns';
+import { ArrowDown, ArrowUp, Calendar as CalendarIcon, ChevronRight, Wallet } from 'lucide-react';
 import * as React from 'react';
 import { DateRange } from 'react-day-picker';
 
@@ -10,7 +10,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import TableLayout from '@/layouts/table-layout';
 import { cn } from '@/lib/utils';
-import { numberFormat } from '@/utils/formatter';
+import { dateFormatWithDay, numberFormat } from '@/utils/formatter';
 import Create from './transaction/create';
 import List from './transaction/list';
 
@@ -64,10 +64,11 @@ export default function Dashboard({
                                 {date?.from ? (
                                     date.to ? (
                                         <>
-                                            {format(date.from, 'LLL dd, y')} - {format(date.to, 'LLL dd, y')}
+                                            {dateFormatWithDay(addHours(date.from, 7).toString())} -{' '}
+                                            {dateFormatWithDay(addHours(date.to, 7).toString())}
                                         </>
                                     ) : (
-                                        format(date.from, 'LLL dd, y')
+                                        dateFormatWithDay(addHours(date.from, 7).toString())
                                     )
                                 ) : (
                                     <span>Pilih Tanggal</span>
@@ -99,6 +100,11 @@ export default function Dashboard({
                 </div>
                 <div className="flex items-center justify-between gap-4 px-4">
                     <h3 className="font-medium tracking-wide uppercase">Transaksi Terakhir</h3>
+                    <Link href={route('transaction.index')}>
+                        <Button size="icon" variant="outline">
+                            <ChevronRight />
+                        </Button>
+                    </Link>
                     <Create title={title} froms={froms} tos={tos} />
                 </div>
                 <div>
