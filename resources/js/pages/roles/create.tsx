@@ -56,7 +56,7 @@ export default function Create({ title, permissions }: { title: string; permissi
                         <Plus className="icon" /> {createText}
                     </Button>
                 ) : (
-                    <Button className="fixed right-4 bottom-32 z-10 h-12 w-12 rounded-lg shadow-lg">
+                    <Button className="fixed right-4 bottom-36 z-10 h-12 w-12 rounded-lg shadow-lg">
                         <Plus className="size-6" />
                     </Button>
                 ))
