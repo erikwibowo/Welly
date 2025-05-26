@@ -43,7 +43,9 @@ class AssetController extends Controller implements HasMiddleware
         return Inertia::render('asset/index', [
             'title' => 'Dompet & Aset',
             'filters' => $filters,
-            'assets' => $assets->paginate($filters['perpage'])->onEachSide(0)->appends('query', null)->withQueryString()
+            'assets' => $assets->query(function ($query) {
+                $query->with(['transactionsFrom.from', 'transactionsFrom.to', 'transactionsTo.from', 'transactionsTo.to']);
+            })->paginate($filters['perpage'])->onEachSide(0)->appends('query', null)->withQueryString()
         ]);
     }
 

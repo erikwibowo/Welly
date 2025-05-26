@@ -21,6 +21,7 @@ import { EllipsisIcon, EllipsisVerticalIcon, SearchIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import Create from './create';
 import Edit from './edit';
+import Transaction from './transaction';
 
 export default function Index({ title, filters, assets }: { title: string; filters: Filter; assets: App.Paginate<App.Models.Asset> }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -152,6 +153,7 @@ export default function Index({ title, filters, assets }: { title: string; filte
                             <SortableTableHead field={filters.field} onSort={() => handleSort('initial_value')}>
                                 Nilai Awal
                             </SortableTableHead>
+                            <TableHead className="text-right">Saldo</TableHead>
                             <SortableTableHead field={filters.field} onSort={() => handleSort('note')}>
                                 Catatan
                             </SortableTableHead>
@@ -179,6 +181,9 @@ export default function Index({ title, filters, assets }: { title: string; filte
                                 </TableCell>
                                 <TableCell>{asset.owner}</TableCell>
                                 <TableCell className="text-right">{numberFormat(asset.initial_value)}</TableCell>
+                                <TableCell className="text-right">
+                                    <Transaction title={'Transaksi ' + asset.name + ' (' + asset.owner + ')'} asset={asset} />
+                                </TableCell>
                                 <TableCell>{asset.note ?? '-'}</TableCell>
                                 <TableCell>{dateFormat(asset.created_at || '')}</TableCell>
                                 <TableCell className="text-right">

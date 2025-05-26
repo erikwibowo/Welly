@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
 class Asset extends Model
 {
-    use Searchable;
+    use Searchable, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -20,7 +22,8 @@ class Asset extends Model
     ];
 
     protected $appends = [
-        'type_view'
+        'type_view',
+        'transactions'
     ];
 
     public function getTypeViewAttribute()
@@ -57,5 +60,35 @@ class Asset extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all transactions where this asset is the source.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transactionsFrom(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'from_asset_id');
+    }
+
+    /**
+     * Get all transactions where this asset is the destination.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transactionsTo(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'to_asset_id');
+    }
+
+    /**
+     * Get all transactions related to this asset (both from and to).
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getTransactionsAttribute()
+    {
+        return $this->transactionsFrom->merge($this->transactionsTo)->sortByDesc('date')->sortByDesc('created_at')->values();
     }
 }

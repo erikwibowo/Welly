@@ -121,7 +121,12 @@ declare namespace App.Models {
     created_at?: string
     updated_at?: string
     type_view?: any
+    transactions?: any
+    transactions_from_count?: number
+    transactions_to_count?: number
     user?: App.Models.User
+    transactionsFrom?: App.Models.Transaction[]
+    transactionsTo?: App.Models.Transaction[]
   }
 }
 
