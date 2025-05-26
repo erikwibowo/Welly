@@ -34,6 +34,8 @@ class Transaction extends Model
             return "Pengeluaran";
         } else if ($this->attributes['type'] == 'transfer') {
             return "Transfer";
+        } else {
+            return "Tidak Diketahui";
         }
     }
 

@@ -115,10 +115,12 @@ declare namespace App.Models {
     name: string
     owner: string
     initial_value: number
+    type?: string
     note?: string
     deleted_at?: string
     created_at?: string
     updated_at?: string
+    type_view?: any
     user?: App.Models.User
   }
 }

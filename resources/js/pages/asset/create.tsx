@@ -3,6 +3,7 @@ import ResponsiveDialog from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useLang } from '@/hooks/use-lang';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -19,6 +20,7 @@ export default function Create({ title }: { title: string }) {
         name: '',
         owner: '',
         initial_value: '',
+        type: 'asset',
         note: '',
     });
 
@@ -71,6 +73,24 @@ export default function Create({ title }: { title: string }) {
             }
         >
             <div className="space-y-4">
+                <div className="grid gap-2">
+                    <Label htmlFor="type">Jenis</Label>
+                    <Select
+                        onValueChange={(value) => {
+                            setData('type', value as 'asset' | 'liability');
+                        }}
+                        value={String(data.type)}
+                    >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Pilih Jenis" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="asset">Aset</SelectItem>
+                            <SelectItem value="liability">Liabilitas</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <InputError message={errors.type} />
+                </div>
                 <div className="grid gap-2">
                     <Label htmlFor="name">{useLang('label', 'name')}</Label>
                     <Input

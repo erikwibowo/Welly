@@ -15,8 +15,24 @@ class Asset extends Model
         'name',
         'owner',
         'initial_value',
+        'type',
         'note',
     ];
+
+    protected $appends = [
+        'type_view'
+    ];
+
+    public function getTypeViewAttribute()
+    {
+        if ($this->attributes['type'] == 'asset') {
+            return "Aset";
+        } else if ($this->attributes['type'] == 'liability') {
+            return "Liabilitas";
+        } else {
+            return "Tidak Diketahui";
+        }
+    }
 
     /**
      * Get the indexable data array for the model.

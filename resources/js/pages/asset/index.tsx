@@ -12,6 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useLang } from '@/hooks/use-lang';
 import TableLayout from '@/layouts/table-layout';
+import { cn } from '@/lib/utils';
 import { BreadcrumbItem, Filter, SharedData } from '@/types';
 import { dateFormat, numberFormat } from '@/utils/formatter';
 import { Head, router, usePage } from '@inertiajs/react';
@@ -172,7 +173,10 @@ export default function Index({ title, filters, assets }: { title: string; filte
                                     />
                                 </TableCell>
                                 <TableHead>{numberFormat(assets.from + index)}</TableHead>
-                                <TableCell className="font-medium">{asset.name}</TableCell>
+                                <TableCell className="font-medium">
+                                    {asset.name} <br />
+                                    <small className={cn(asset.type === 'asset' ? 'text-success' : 'text-destructive')}>{asset.type_view}</small>
+                                </TableCell>
                                 <TableCell>{asset.owner}</TableCell>
                                 <TableCell className="text-right">{numberFormat(asset.initial_value)}</TableCell>
                                 <TableCell>{asset.note ?? '-'}</TableCell>

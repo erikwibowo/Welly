@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useLang } from '@/hooks/use-lang';
 import { usePermission } from '@/hooks/use-permission';
@@ -18,6 +19,7 @@ export default function Edit({ title, asset, type }: { title: string; asset: App
         name: asset.name,
         owner: asset.owner,
         initial_value: asset.initial_value,
+        type: asset.type,
         note: asset.note ?? '',
     });
 
@@ -71,6 +73,24 @@ export default function Edit({ title, asset, type }: { title: string; asset: App
             }
         >
             <div className="space-y-4">
+                <div className="grid gap-2">
+                    <Label htmlFor="type">Jenis</Label>
+                    <Select
+                        onValueChange={(value) => {
+                            setData('type', value as 'asset' | 'liability');
+                        }}
+                        value={String(data.type)}
+                    >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Pilih Jenis" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="asset">Aset</SelectItem>
+                            <SelectItem value="liability">Liabilitas</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <InputError message={errors.type} />
+                </div>
                 <div className="grid gap-2">
                     <Label htmlFor="name">{useLang('label', 'name')}</Label>
                     <Input

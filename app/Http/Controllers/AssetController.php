@@ -63,6 +63,7 @@ class AssetController extends Controller implements HasMiddleware
                 'name' => $request->name,
                 'owner' => $request->owner,
                 'initial_value' => $request->initial_value,
+                'type' => $request->type,
                 'note' => $request->note,
             ]);
             return back()->with(['type' => 'success', 'message' => __('app.banner.created', ['name' => $asset->name])]);
@@ -98,6 +99,7 @@ class AssetController extends Controller implements HasMiddleware
                 'name' => $request->name,
                 'owner' => $request->owner,
                 'initial_value' => $request->initial_value,
+                'type' => $request->type,
                 'note' => $request->note,
             ]);
             return back()->with(['type' => 'success', 'message' => __('app.banner.updated', ['name' => $asset->name])]);
