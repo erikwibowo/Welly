@@ -2,7 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { ArrowDown, ArrowUp, Calendar as CalendarIcon, Wallet } from 'lucide-react';
 import * as React from 'react';
 import { DateRange } from 'react-day-picker';
 
@@ -10,8 +10,19 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { numberFormat } from '@/utils/formatter';
 
-export default function Dashboard({ title }: { title: string }) {
+export default function Dashboard({
+    title,
+    totals,
+}: {
+    title: string;
+    totals: {
+        assets: number;
+        incomes: number;
+        expenses: number;
+    };
+}) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: title,
@@ -61,7 +72,23 @@ export default function Dashboard({ title }: { title: string }) {
                     </Popover>
                 </div>
                 <h3>Ikhtisar</h3>
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3"></div>
+                <div className="grid auto-rows-min gap-2 md:grid-cols-4 md:gap-4">
+                    <div className="bg-destructive/10 text-destructive border-destructive/20 relative rounded-lg border p-4 shadow">
+                        <h4 className="text-lg font-semibold">Total Pengeluaran</h4>
+                        <p className="text-2xl font-bold">{numberFormat(totals.expenses)}</p>
+                        <ArrowUp className="absolute top-4 right-4 size-16 opacity-20" />
+                    </div>
+                    <div className="bg-success/10 text-success border-success/20 relative rounded-lg border p-4 shadow">
+                        <h4 className="text-lg font-semibold">Total Pendapatan</h4>
+                        <p className="text-2xl font-bold">{numberFormat(totals.incomes)}</p>
+                        <ArrowDown className="absolute top-4 right-4 size-16 opacity-20" />
+                    </div>
+                    <div className="bg-info/10 text-info border-info/20 relative rounded-lg border p-4 shadow">
+                        <h4 className="text-lg font-semibold">Total Aset</h4>
+                        <p className="text-2xl font-bold">{numberFormat(totals.assets)}</p>
+                        <Wallet className="absolute top-4 right-4 size-16 opacity-20" />
+                    </div>
+                </div>
             </div>
         </AppLayout>
     );
