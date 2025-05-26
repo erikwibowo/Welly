@@ -65,7 +65,7 @@ export default function Edit({ title, asset, type }: { title: string; asset: App
                     <Button size="lg" onClick={() => setOpen(false)} type="button" variant="outline">
                         {useLang('button', 'cancel')}
                     </Button>
-                    <Button disabled={processing} type="submit">
+                    <Button size="lg" disabled={processing} type="submit">
                         {processing ? <Loader2 className="size-4 animate-spin" /> : <SaveIcon className="icon" />}
                         {useLang('button', 'save')}
                     </Button>

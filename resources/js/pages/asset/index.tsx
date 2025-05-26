@@ -68,7 +68,7 @@ export default function Index({ title, filters, assets }: { title: string; filte
     return (
         <TableLayout breadcrumbs={breadcrumbs}>
             <Head title={title} />
-            <div className="mx-auto w-full space-y-4 py-0 md:py-4">
+            <div className="mx-auto w-full space-y-4 py-4">
                 <div className="flex scroll-px-0.5 items-center justify-between gap-4 overflow-x-auto px-4">
                     <div className="flex items-center gap-2">
                         <Create title={title} />

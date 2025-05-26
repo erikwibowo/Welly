@@ -11,11 +11,14 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import TableLayout from '@/layouts/table-layout';
 import { cn } from '@/lib/utils';
 import { dateFormatWithDay, numberFormat } from '@/utils/formatter';
+import Create from './transaction/create';
 
 export default function Dashboard({
     title,
     totals,
     transactions,
+    froms,
+    tos,
 }: {
     title: string;
     totals: {
@@ -24,6 +27,8 @@ export default function Dashboard({
         expenses: number;
     };
     transactions?: App.Models.Transaction[];
+    froms: App.Models.Asset[];
+    tos: App.Models.Asset[];
 }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -42,14 +47,15 @@ export default function Dashboard({
         <TableLayout breadcrumbs={breadcrumbs}>
             <Head title={title} />
             <div className="flex min-h-svh w-full flex-1 flex-col gap-4 rounded-xl">
-                <div className={cn('flex justify-end gap-2 px-4')}>
+                <div className={cn('flex flex-wrap items-center justify-between gap-2 px-4')}>
+                    <h3 className="font-medium tracking-wide uppercase">Ikhtisar</h3>
                     <Popover>
                         <PopoverTrigger asChild>
                             <Button
                                 id="date"
                                 variant={'outline'}
                                 className={cn(
-                                    'dark:bg-input/30 border-input min-w-[300px] justify-between border bg-transparent text-left font-normal',
+                                    'dark:bg-input/30 border-input w-fit justify-between border bg-transparent text-left font-normal',
                                     'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
                                     !date && 'text-muted-foreground',
                                 )}
@@ -73,7 +79,6 @@ export default function Dashboard({
                         </PopoverContent>
                     </Popover>
                 </div>
-                <h3 className="px-4 font-medium tracking-wide uppercase">Ikhtisar</h3>
                 <div className="grid auto-rows-min gap-2 px-4 md:grid-cols-4 md:gap-4">
                     <div className="bg-destructive/10 text-destructive border-destructive/20 relative rounded-lg border p-4 shadow">
                         <h4 className="text-lg font-semibold">Total Pengeluaran</h4>
@@ -91,7 +96,10 @@ export default function Dashboard({
                         <Wallet className="absolute top-4 right-4 size-16 opacity-20" />
                     </div>
                 </div>
-                <h3 className="px-4 font-medium tracking-wide uppercase">Transaksi Terakhir</h3>
+                <div className="flex items-center justify-between gap-4 px-4">
+                    <h3 className="font-medium tracking-wide uppercase">Transaksi Terakhir</h3>
+                    <Create title={title} froms={froms} tos={tos} />
+                </div>
                 <div>
                     {transactions?.map((transaction, index) => (
                         <div className="border-b px-4 py-2 last:border-none" key={index}>
