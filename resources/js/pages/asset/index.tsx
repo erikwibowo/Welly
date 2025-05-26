@@ -151,9 +151,9 @@ export default function Index({ title, filters, assets }: { title: string; filte
                                 Pemilik
                             </SortableTableHead>
                             <SortableTableHead field={filters.field} onSort={() => handleSort('initial_value')}>
-                                Nilai Awal
+                                Saldo Awal
                             </SortableTableHead>
-                            <TableHead className="text-right">Saldo</TableHead>
+                            <TableHead className="text-right">Saldo Akhir</TableHead>
                             <SortableTableHead field={filters.field} onSort={() => handleSort('note')}>
                                 Catatan
                             </SortableTableHead>
