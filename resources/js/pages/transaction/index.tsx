@@ -25,6 +25,7 @@ import { useEffect, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import Create from './create';
 import Edit from './edit';
+import List from './list';
 
 export default function Index({
     title,
@@ -208,7 +209,8 @@ export default function Index({
                     </div>
                 </div>
                 <Empty show={transactions.data.length === 0} />
-                <Table className={transactions.data.length > 0 ? 'w-full' : 'hidden'}>
+                <List title={title} froms={froms} tos={tos} transactions={transactions.data} />
+                <Table className={transactions.data.length > 0 ? 'hidden w-full md:inline-table' : 'hidden'}>
                     <TableHeader>
                         <TableRow>
                             <TableHead>
@@ -290,7 +292,7 @@ export default function Index({
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>
-                                                <p className="max-w-40 truncate font-semibold">{transaction.type}</p>
+                                                <p className="max-w-40 truncate font-semibold">{transaction.note ?? '-'}</p>
                                             </DropdownMenuLabel>
                                             <Separator className="my-1" />
                                             <Edit title={title} transaction={transaction} froms={froms} tos={tos} />
@@ -298,7 +300,7 @@ export default function Index({
                                                 title={title}
                                                 permissions={['transaction delete']}
                                                 routes="transaction.destroy"
-                                                description={transaction.type}
+                                                description={transaction.note ?? '-'}
                                                 id={transaction.id}
                                             />
                                         </DropdownMenuContent>

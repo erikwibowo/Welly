@@ -1,7 +1,7 @@
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { ArrowDown, ArrowLeftRight, ArrowRight, ArrowUp, Calendar as CalendarIcon, Wallet } from 'lucide-react';
+import { ArrowDown, ArrowUp, Calendar as CalendarIcon, Wallet } from 'lucide-react';
 import * as React from 'react';
 import { DateRange } from 'react-day-picker';
 
@@ -10,8 +10,9 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import TableLayout from '@/layouts/table-layout';
 import { cn } from '@/lib/utils';
-import { dateFormatWithDay, numberFormat } from '@/utils/formatter';
+import { numberFormat } from '@/utils/formatter';
 import Create from './transaction/create';
+import List from './transaction/list';
 
 export default function Dashboard({
     title,
@@ -101,63 +102,7 @@ export default function Dashboard({
                     <Create title={title} froms={froms} tos={tos} />
                 </div>
                 <div>
-                    {transactions?.map((transaction, index) => (
-                        <div className="border-b px-4 py-2 last:border-none" key={index}>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <div
-                                        className={cn(
-                                            'flex h-10 w-10 items-center justify-center rounded-full',
-                                            transaction.type === 'income'
-                                                ? 'bg-success/10 text-success'
-                                                : transaction.type === 'expense'
-                                                  ? 'bg-destructive/10 text-destructive'
-                                                  : 'bg-info/10 text-info',
-                                        )}
-                                    >
-                                        {transaction.type === 'income' ? (
-                                            <ArrowDown className="size-6" />
-                                        ) : transaction.type === 'expense' ? (
-                                            <ArrowUp className="size-6" />
-                                        ) : (
-                                            <ArrowLeftRight className="size-6" />
-                                        )}
-                                    </div>
-                                    <div>
-                                        <h4 className="line-clamp-1 font-medium">{transaction.note ?? '-'}</h4>
-                                        <div className="text-xs">
-                                            {transaction.type !== 'transfer' ? (
-                                                <p>{transaction.from?.name + ' (' + transaction.from?.owner + ')'}</p>
-                                            ) : (
-                                                <p className="flex flex-wrap gap-1">
-                                                    <span>
-                                                        {transaction.from?.name} ({transaction.from?.owner})
-                                                    </span>
-                                                    <ArrowRight className="icon shrink-0" />
-                                                    <span>
-                                                        {transaction.to?.name} ({transaction.to?.owner})
-                                                    </span>
-                                                </p>
-                                            )}
-                                        </div>
-                                        <p className="text-muted-foreground text-sm">{dateFormatWithDay(transaction.date)}</p>
-                                    </div>
-                                </div>
-                                <p
-                                    className={cn(
-                                        'text-lg font-bold',
-                                        transaction.type === 'income'
-                                            ? 'text-success'
-                                            : transaction.type === 'expense'
-                                              ? 'text-destructive'
-                                              : 'text-info',
-                                    )}
-                                >
-                                    {numberFormat(transaction.amount)}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
+                    <List title="Transaksi" froms={froms} tos={tos} transactions={transactions ?? []} />
                 </div>
             </div>
         </TableLayout>
