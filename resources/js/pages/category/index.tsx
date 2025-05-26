@@ -20,6 +20,7 @@ import { EllipsisIcon, EllipsisVerticalIcon, SearchIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import Create from './create';
 import Edit from './edit';
+import List from './list';
 
 export default function Index({ title, filters, categories }: { title: string; filters: Filter; categories: App.Paginate<App.Models.Category> }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -132,7 +133,8 @@ export default function Index({ title, filters, categories }: { title: string; f
                     </div>
                 </div>
                 <Empty show={categories.data.length === 0} />
-                <Table className={categories.data.length > 0 ? 'w-full' : 'hidden'}>
+                <List className="md:hidden" title={title} categories={categories.data} />
+                <Table className={categories.data.length > 0 ? 'hidden w-full md:inline-table' : 'hidden'}>
                     <TableHeader>
                         <TableRow>
                             <TableHead>
