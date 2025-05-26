@@ -83,7 +83,7 @@ export function BottomNavbar() {
                 <BottomNavItem
                 href={route('asset.index')}
                 icon={<Wallet className={cn('size-5')} />}
-                label="Dompet & Asset"
+                label="Aset & Liabilitas"
                 isActive={route().current('asset.*')}
                 />
             )}

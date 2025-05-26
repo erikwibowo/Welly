@@ -105,7 +105,6 @@ class TransactionController extends Controller implements HasMiddleware
     {
         try {
             $transaction->update([
-                'user_id' => auth()->id(),
                 'category_id' => $request->category_id,
                 'from_asset_id' => $request->from_asset_id,
                 'to_asset_id' => $request->type != 'transfer' ? null : $request->to_asset_id,

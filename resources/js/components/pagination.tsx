@@ -9,7 +9,7 @@ export default function Pagination<T>({ data, className }: { data: App.Paginate<
     const fromText = useLang('text', 'from');
     return (
         data.data.length > 0 && (
-            <div className={cn('flex w-full flex-wrap items-center justify-between gap-4 px-4 text-sm', className)}>
+            <div className={cn('flex w-full flex-col flex-wrap items-center justify-between gap-4 px-4 text-sm md:flex-row', className)}>
                 <p>
                     {numberFormat(data.from)} - {numberFormat(data.to)} {fromText} {numberFormat(data.total)}
                 </p>

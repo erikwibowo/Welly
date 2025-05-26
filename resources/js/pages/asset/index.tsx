@@ -167,9 +167,6 @@ export default function Index({
                                 Saldo Awal
                             </SortableTableHead>
                             <TableHead className="text-right">Saldo Akhir</TableHead>
-                            <SortableTableHead field={filters.field} onSort={() => handleSort('note')}>
-                                Catatan
-                            </SortableTableHead>
                             <SortableTableHead field={filters.field} onSort={() => handleSort('created_at')}>
                                 {useLang('column', 'date')}
                             </SortableTableHead>
@@ -192,12 +189,14 @@ export default function Index({
                                     {asset.name} <br />
                                     <small className={cn(asset.type === 'asset' ? 'text-success' : 'text-destructive')}>{asset.type_view}</small>
                                 </TableCell>
-                                <TableCell>{asset.owner}</TableCell>
+                                <TableCell>
+                                    {asset.owner} <br />
+                                    <small>{asset.note ?? '-'}</small>
+                                </TableCell>
                                 <TableCell className="text-right">{numberFormat(asset.initial_value)}</TableCell>
                                 <TableCell className="text-right">
                                     <Transaction title={'Transaksi ' + asset.name + ' (' + asset.owner + ')'} asset={asset} />
                                 </TableCell>
-                                <TableCell>{asset.note ?? '-'}</TableCell>
                                 <TableCell>{dateFormat(asset.created_at || '')}</TableCell>
                                 <TableCell className="text-right">
                                     <DropdownMenu modal={false}>

@@ -41,9 +41,7 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
                                 return currentTotal;
                             },
                             Number(asset.initial_value) || 0,
-                        ) ||
-                            Number(asset.initial_value) ||
-                            0,
+                        ),
                     )}
                 </Button>
             }
@@ -145,9 +143,7 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
                                     return currentTotal;
                                 },
                                 Number(asset.initial_value) || 0,
-                            ) ||
-                                Number(asset.initial_value) ||
-                                0,
+                            ),
                         )}
                     </p>
                 </div>

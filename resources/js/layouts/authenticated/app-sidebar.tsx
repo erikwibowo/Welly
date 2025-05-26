@@ -19,7 +19,7 @@ export function AppSidebar() {
     ];
     const masterNavItems: NavItem[] = [
         {
-            title: 'Aset & Dompet',
+            title: 'Aset & Liabilitas',
             href: 'asset.index',
             icon: Wallet,
             permission: 'asset read',

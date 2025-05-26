@@ -41,7 +41,7 @@ class AssetController extends Controller implements HasMiddleware
             $assets->orderBy($request->field, $request->order);
         }
         return Inertia::render('asset/index', [
-            'title' => 'Dompet & Aset',
+            'title' => 'Aset & Liabilitas',
             'filters' => $filters,
             'totals' => [
                 'initial_value' => Asset::sum('initial_value'),
