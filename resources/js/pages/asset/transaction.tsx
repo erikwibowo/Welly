@@ -20,14 +20,14 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
                     {numberFormat(
                         asset.transactions?.reduce((total: number, transaction: App.Models.Transaction) => {
                             if (transaction.type === 'expense') {
-                                return total - transaction.amount;
+                                return total - Number(transaction.amount);
                             } else if (transaction.type === 'income') {
-                                return total + transaction.amount;
+                                return total + Number(transaction.amount);
                             } else if (transaction.type === 'transfer') {
                                 if (transaction.from_asset_id === asset.id) {
-                                    return total - transaction.amount;
+                                    return total - Number(transaction.amount);
                                 } else if (transaction.to_asset_id === asset.id) {
-                                    return total + transaction.amount;
+                                    return total + Number(transaction.amount);
                                 }
                             }
                             return total;
@@ -101,7 +101,7 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
                                           : 'text-info',
                                 )}
                             >
-                                {numberFormat(transaction.amount)}
+                                {numberFormat(Number(transaction.amount))}
                             </p>
                         </div>
                     </div>
@@ -112,14 +112,14 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
                         {numberFormat(
                             asset.transactions?.reduce((total: number, transaction: App.Models.Transaction) => {
                                 if (transaction.type === 'expense') {
-                                    return total - transaction.amount;
+                                    return total - Number(transaction.amount);
                                 } else if (transaction.type === 'income') {
-                                    return total + transaction.amount;
+                                    return total + Number(transaction.amount);
                                 } else if (transaction.type === 'transfer') {
                                     if (transaction.from_asset_id === asset.id) {
-                                        return total - transaction.amount;
+                                        return total - Number(transaction.amount);
                                     } else if (transaction.to_asset_id === asset.id) {
-                                        return total + transaction.amount;
+                                        return total + Number(transaction.amount);
                                     }
                                 }
                                 return total;
