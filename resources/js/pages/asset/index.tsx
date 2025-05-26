@@ -21,6 +21,7 @@ import { EllipsisIcon, EllipsisVerticalIcon, SearchIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import Create from './create';
 import Edit from './edit';
+import List from './list';
 import Transaction from './transaction';
 
 export default function Index({
@@ -147,7 +148,8 @@ export default function Index({
                     </div>
                 </div>
                 <Empty show={assets.data.length === 0} />
-                <Table className={assets.data.length > 0 ? 'w-full' : 'hidden'}>
+                <List title={title} className="md:hidden" assets={assets.data} />
+                <Table className={assets.data.length > 0 ? 'hidden w-full md:inline-table' : 'hidden'}>
                     <TableHeader>
                         <TableRow>
                             <TableHead>
@@ -164,9 +166,9 @@ export default function Index({
                                 Pemilik
                             </SortableTableHead>
                             <SortableTableHead field={filters.field} onSort={() => handleSort('initial_value')}>
-                                Saldo Awal
+                                Nilai Awal
                             </SortableTableHead>
-                            <TableHead className="text-right">Saldo Akhir</TableHead>
+                            <TableHead className="text-right">Nilai Akhir</TableHead>
                             <SortableTableHead field={filters.field} onSort={() => handleSort('created_at')}>
                                 {useLang('column', 'date')}
                             </SortableTableHead>

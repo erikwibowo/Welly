@@ -15,7 +15,7 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
             className="max-w-xl"
             title={title}
             trigger={
-                <Button variant="link">
+                <Button variant="link" className="px-0 underline">
                     {numberFormat(
                         asset.transactions?.reduce(
                             (total: number, transaction: App.Models.Transaction) => {
@@ -55,12 +55,12 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
         >
             <div>
                 <div className="flex items-center justify-between gap-4 border-b py-2">
-                    <h4 className="font-bold uppercase">Saldo Awal</h4>
+                    <h4 className="font-bold uppercase">Nilai Awal</h4>
                     <p className="text-lg font-bold">{numberFormat(asset.initial_value)}</p>
                 </div>
                 <List transactions={asset.transactions ?? []} />
                 <div className="flex items-center justify-between gap-4 py-2">
-                    <h4 className="font-bold uppercase">Saldo AKhir</h4>
+                    <h4 className="font-bold uppercase">Nilai Akhir</h4>
                     <p className="text-lg font-bold">
                         {numberFormat(
                             asset.transactions?.reduce(
