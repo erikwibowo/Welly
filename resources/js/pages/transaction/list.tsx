@@ -14,12 +14,14 @@ export default function List({
     transactions,
     froms,
     tos,
+    showAction = true,
 }: {
     title?: string;
     className?: string;
     transactions: App.Models.Transaction[];
     froms?: App.Models.Asset[];
     tos?: App.Models.Asset[];
+    showAction?: boolean;
 }) {
     const actionColumnLang = useLang('column', 'action');
     return transactions?.map((transaction, index) => (
@@ -65,28 +67,32 @@ export default function List({
                     </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                    <DropdownMenu modal={false}>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                                <EllipsisIcon className="icon" />
-                                <span className="sr-only">{actionColumnLang}</span>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>
-                                <p className="max-w-40 truncate font-semibold">{transaction.note ?? '-'}</p>
-                            </DropdownMenuLabel>
-                            <Separator className="my-1" />
-                            <Edit title={title ?? ''} transaction={transaction} froms={froms ?? []} tos={tos ?? []} />
-                            <Delete
-                                title={title ?? ''}
-                                permissions={['transaction delete']}
-                                routes="transaction.destroy"
-                                description={transaction.note ?? '-'}
-                                id={transaction.id}
-                            />
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    {showAction ? (
+                        <DropdownMenu modal={false}>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <EllipsisIcon className="icon" />
+                                    <span className="sr-only">{actionColumnLang}</span>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>
+                                    <p className="max-w-40 truncate font-semibold">{transaction.note ?? '-'}</p>
+                                </DropdownMenuLabel>
+                                <Separator className="my-1" />
+                                <Edit title={title ?? ''} transaction={transaction} froms={froms ?? []} tos={tos ?? []} />
+                                <Delete
+                                    title={title ?? ''}
+                                    permissions={['transaction delete']}
+                                    routes="transaction.destroy"
+                                    description={transaction.note ?? '-'}
+                                    id={transaction.id}
+                                />
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    ) : (
+                        <div></div>
+                    )}
                     <p
                         className={cn(
                             'text-lg font-bold',

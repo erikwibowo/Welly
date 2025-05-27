@@ -15,7 +15,7 @@ import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import TableLayout from '@/layouts/table-layout';
 import { cn } from '@/lib/utils';
-import { dateFormat, dateFormatWithDay, numberFormat, shortDateFormat } from '@/utils/formatter';
+import { numberFormat, shortDateFormat } from '@/utils/formatter';
 import Create from './transaction/create';
 import Edit from './transaction/edit';
 import List from './transaction/list';
@@ -70,11 +70,10 @@ export default function Dashboard({
                                 {date?.from ? (
                                     date.to ? (
                                         <>
-                                            {dateFormatWithDay(addHours(date.from, 7).toString())} -{' '}
-                                            {dateFormatWithDay(addHours(date.to, 7).toString())}
+                                            {shortDateFormat(addHours(date.from, 7).toString())} - {shortDateFormat(addHours(date.to, 7).toString())}
                                         </>
                                     ) : (
-                                        dateFormatWithDay(addHours(date.from, 7).toString())
+                                        shortDateFormat(addHours(date.from, 7).toString())
                                     )
                                 ) : (
                                     <span>Pilih Tanggal</span>
@@ -164,7 +163,7 @@ export default function Dashboard({
                                     <TableCell>{shortDateFormat(transaction.date || '')}</TableCell>
                                     <TableCell>
                                         {transaction.user?.name} <br />
-                                        <small>{dateFormat(transaction.created_at || '')}</small>
+                                        <small>{shortDateFormat(transaction.created_at || '')}</small>
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu modal={false}>

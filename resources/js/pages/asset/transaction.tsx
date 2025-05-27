@@ -58,7 +58,7 @@ export default function Transaction({ title, asset }: { title: string; asset: Ap
                     <h4 className="font-bold uppercase">Nilai Awal</h4>
                     <p className="text-lg font-bold">{numberFormat(asset.initial_value)}</p>
                 </div>
-                <List transactions={asset.transactions ?? []} />
+                <List className="px-0" showAction={false} transactions={asset.transactions ?? []} />
                 <div className="flex items-center justify-between gap-4 py-2">
                     <h4 className="font-bold uppercase">Nilai Akhir</h4>
                     <p className="text-lg font-bold">
