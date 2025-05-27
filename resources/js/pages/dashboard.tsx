@@ -100,12 +100,12 @@ export default function Dashboard({
                 </div>
                 <div className="flex items-center justify-between gap-4 px-4">
                     <h3 className="font-medium tracking-wide uppercase">Transaksi Terakhir</h3>
-                    <Link href={route('transaction.index')}>
+                    <Link className="md:hidden" href={route('transaction.index')}>
                         <Button size="icon" variant="outline">
                             <ChevronRight />
                         </Button>
                     </Link>
-                    <Create title={title} froms={froms} tos={tos} />
+                    <Create title="Transaksi" froms={froms} tos={tos} />
                 </div>
                 <div>
                     <List title="Transaksi" froms={froms} tos={tos} transactions={transactions ?? []} />
