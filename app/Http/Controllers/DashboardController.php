@@ -26,7 +26,7 @@ class DashboardController extends Controller
             ],
             'transactions' => Transaction::whereBetween('date', [$filters['dateFrom'], $filters['dateTo']])
                 ->orderBy('date', 'desc')
-                ->with(['from', 'to'])->latest()->get(),
+                ->with(['from', 'to', 'user', 'category'])->latest()->get(),
             'froms' => Asset::orderBy('name')->get(),
             'tos' => Asset::orderBy('name')->get(),
         ]);

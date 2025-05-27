@@ -1,17 +1,23 @@
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { addHours } from 'date-fns';
-import { ArrowDown, ArrowUp, Calendar as CalendarIcon, ChevronRight, Wallet } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUp, Calendar as CalendarIcon, ChevronRight, EllipsisIcon, Wallet } from 'lucide-react';
 import * as React from 'react';
 import { DateRange } from 'react-day-picker';
 
+import Delete from '@/components/delete';
+import Empty from '@/components/empty';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import TableLayout from '@/layouts/table-layout';
 import { cn } from '@/lib/utils';
-import { dateFormatWithDay, numberFormat } from '@/utils/formatter';
+import { dateFormat, dateFormatWithDay, numberFormat, shortDateFormat } from '@/utils/formatter';
 import Create from './transaction/create';
+import Edit from './transaction/edit';
 import List from './transaction/list';
 
 export default function Dashboard({
@@ -108,7 +114,86 @@ export default function Dashboard({
                     <Create title="Transaksi" froms={froms} tos={tos} />
                 </div>
                 <div>
-                    <List title="Transaksi" froms={froms} tos={tos} transactions={transactions ?? []} />
+                    <Empty show={transactions?.length === 0} />
+                    <List className="md:hidden" title="Transaksi" froms={froms} tos={tos} transactions={transactions ?? []} />
+                    <Table className={(transactions?.length ?? 0) > 0 ? 'hidden w-full md:inline-table' : 'hidden'}>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="text-center">#</TableHead>
+                                <TableHead>Jenis</TableHead>
+                                <TableHead>Kategori</TableHead>
+                                <TableHead>Sumber Dana</TableHead>
+                                <TableHead className="text-right">Nominal</TableHead>
+                                <TableHead>Tanggal</TableHead>
+                                <TableHead>Oleh</TableHead>
+                                <TableHead className="sr-only">Aksi</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {transactions?.map((transaction, index) => (
+                                <TableRow key={transaction.id}>
+                                    <TableCell className="text-center">{numberFormat(index + 1)}</TableCell>
+                                    <TableCell className="font-medium">
+                                        {transaction.type_view} <br />
+                                        <small>{transaction.note ?? '-'}</small>
+                                    </TableCell>
+                                    <TableCell>{transaction.category?.name}</TableCell>
+                                    <TableCell>
+                                        {transaction.type !== 'transfer' ? (
+                                            transaction.from?.name + ' (' + transaction.from?.owner + ')'
+                                        ) : (
+                                            <span className="flex items-center gap-1">
+                                                {transaction.from?.name} ({transaction.from?.owner})
+                                                <ArrowRight className="icon" />
+                                                {transaction.to?.name} ({transaction.to?.owner})
+                                            </span>
+                                        )}
+                                    </TableCell>
+                                    <TableCell
+                                        className={cn(
+                                            'text-right font-medium',
+                                            transaction.type === 'income'
+                                                ? 'text-success'
+                                                : transaction.type === 'expense'
+                                                  ? 'text-destructive'
+                                                  : 'text-info',
+                                        )}
+                                    >
+                                        {numberFormat(transaction.amount)}
+                                    </TableCell>
+                                    <TableCell>{shortDateFormat(transaction.date || '')}</TableCell>
+                                    <TableCell>
+                                        {transaction.user?.name} <br />
+                                        <small>{dateFormat(transaction.created_at || '')}</small>
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <DropdownMenu modal={false}>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon">
+                                                    <EllipsisIcon className="icon" />
+                                                    <span className="sr-only">Aksi</span>
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuLabel>
+                                                    <p className="max-w-40 truncate font-semibold">{transaction.note ?? '-'}</p>
+                                                </DropdownMenuLabel>
+                                                <Separator className="my-1" />
+                                                <Edit title="Transaksi" transaction={transaction} froms={froms} tos={tos} />
+                                                <Delete
+                                                    title="Transaksi"
+                                                    permissions={['transaction delete']}
+                                                    routes="transaction.destroy"
+                                                    description={transaction.note ?? '-'}
+                                                    id={transaction.id}
+                                                />
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </div>
             </div>
         </TableLayout>
