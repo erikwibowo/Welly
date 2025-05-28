@@ -65,6 +65,7 @@ export default function Index({ title, filters, categories }: { title: string; f
         }));
     };
     const actionColumnLang = useLang('column', 'action');
+    const { auth } = usePage<SharedData>().props;
     return (
         <TableLayout breadcrumbs={breadcrumbs}>
             <Head title={title} />
@@ -183,15 +184,19 @@ export default function Index({ title, filters, categories }: { title: string; f
                                             <DropdownMenuLabel>
                                                 <p className="max-w-40 truncate font-semibold">{category.name}</p>
                                             </DropdownMenuLabel>
-                                            <Separator className="my-1" />
-                                            <Edit title={title} category={category} />
-                                            <Delete
-                                                title={title}
-                                                permissions={['category delete']}
-                                                routes="category.destroy"
-                                                description={category.name}
-                                                id={category.id}
-                                            />
+                                            {auth.user.id === category.user_id && (
+                                                <>
+                                                    <Separator className="my-1" />
+                                                    <Edit title={title} category={category} />
+                                                    <Delete
+                                                        title={title}
+                                                        permissions={['category delete']}
+                                                        routes="category.destroy"
+                                                        description={category.name}
+                                                        id={category.id}
+                                                    />
+                                                </>
+                                            )}
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

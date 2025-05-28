@@ -80,6 +80,7 @@ export default function Index({
         }));
     };
     const actionColumnLang = useLang('column', 'action');
+    const { auth } = usePage<SharedData>().props;
     return (
         <TableLayout breadcrumbs={breadcrumbs}>
             <Head title={title} />
@@ -212,15 +213,19 @@ export default function Index({
                                             <DropdownMenuLabel>
                                                 <p className="max-w-40 truncate font-semibold">{asset.name}</p>
                                             </DropdownMenuLabel>
-                                            <Separator className="my-1" />
-                                            <Edit title={title} asset={asset} />
-                                            <Delete
-                                                title={title}
-                                                permissions={['asset delete']}
-                                                routes="asset.destroy"
-                                                description={asset.name}
-                                                id={asset.id}
-                                            />
+                                            {auth.user.id === asset.user_id && (
+                                                <>
+                                                    <Separator className="my-1" />
+                                                    <Edit title={title} asset={asset} />
+                                                    <Delete
+                                                        title={title}
+                                                        permissions={['asset delete']}
+                                                        routes="asset.destroy"
+                                                        description={asset.name}
+                                                        id={asset.id}
+                                                    />
+                                                </>
+                                            )}
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

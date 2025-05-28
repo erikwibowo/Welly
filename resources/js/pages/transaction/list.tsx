@@ -4,7 +4,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigg
 import { Separator } from '@/components/ui/separator';
 import { useLang } from '@/hooks/use-lang';
 import { cn } from '@/lib/utils';
+import { SharedData } from '@/types';
 import { dateFormatWithDay, numberFormat } from '@/utils/formatter';
+import { usePage } from '@inertiajs/react';
 import { ArrowDown, ArrowLeftRight, ArrowRight, ArrowUp, EllipsisIcon } from 'lucide-react';
 import Edit from './edit';
 
@@ -24,6 +26,7 @@ export default function List({
     showAction?: boolean;
 }) {
     const actionColumnLang = useLang('column', 'action');
+    const { auth } = usePage<SharedData>().props;
     return transactions?.map((transaction, index) => (
         <div className={cn('m-0 border-b px-4 py-2 last:border-none', className)} key={index}>
             <div className="flex items-center justify-between">
@@ -79,15 +82,19 @@ export default function List({
                                 <DropdownMenuLabel>
                                     <p className="max-w-40 truncate font-semibold">{transaction.note ?? '-'}</p>
                                 </DropdownMenuLabel>
-                                <Separator className="my-1" />
-                                <Edit title={title ?? ''} transaction={transaction} froms={froms ?? []} tos={tos ?? []} />
-                                <Delete
-                                    title={title ?? ''}
-                                    permissions={['transaction delete']}
-                                    routes="transaction.destroy"
-                                    description={transaction.note ?? '-'}
-                                    id={transaction.id}
-                                />
+                                {auth.user.id === transaction.user_id && (
+                                    <>
+                                        <Separator className="my-1" />
+                                        <Edit title={title ?? ''} transaction={transaction} froms={froms ?? []} tos={tos ?? []} />
+                                        <Delete
+                                            title={title ?? ''}
+                                            permissions={['transaction delete']}
+                                            routes="transaction.destroy"
+                                            description={transaction.note ?? '-'}
+                                            id={transaction.id}
+                                        />
+                                    </>
+                                )}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (

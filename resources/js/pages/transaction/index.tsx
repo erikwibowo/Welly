@@ -99,6 +99,7 @@ export default function Index({
         }));
     };
     const actionColumnLang = useLang('column', 'action');
+    const { auth } = usePage<SharedData>().props;
     return (
         <TableLayout breadcrumbs={breadcrumbs}>
             <Head title={title} />
@@ -294,15 +295,19 @@ export default function Index({
                                             <DropdownMenuLabel>
                                                 <p className="max-w-40 truncate font-semibold">{transaction.note ?? '-'}</p>
                                             </DropdownMenuLabel>
-                                            <Separator className="my-1" />
-                                            <Edit title={title} transaction={transaction} froms={froms} tos={tos} />
-                                            <Delete
-                                                title={title}
-                                                permissions={['transaction delete']}
-                                                routes="transaction.destroy"
-                                                description={transaction.note ?? '-'}
-                                                id={transaction.id}
-                                            />
+                                            {auth.user.id === transaction.user_id && (
+                                                <>
+                                                    <Separator className="my-1" />
+                                                    <Edit title={title} transaction={transaction} froms={froms} tos={tos} />
+                                                    <Delete
+                                                        title={title}
+                                                        permissions={['transaction delete']}
+                                                        routes="transaction.destroy"
+                                                        description={transaction.note ?? '-'}
+                                                        id={transaction.id}
+                                                    />
+                                                </>
+                                            )}
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

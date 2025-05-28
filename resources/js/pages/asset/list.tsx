@@ -4,13 +4,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigg
 import { Separator } from '@/components/ui/separator';
 import { useLang } from '@/hooks/use-lang';
 import { cn } from '@/lib/utils';
+import { SharedData } from '@/types';
 import { numberFormat } from '@/utils/formatter';
+import { usePage } from '@inertiajs/react';
 import { EllipsisIcon, Wallet } from 'lucide-react';
 import Edit from './edit';
 import Transaction from './transaction';
 
 export default function List({ title, className, assets }: { title?: string; className?: string; assets: App.Models.Asset[] }) {
     const actionColumnLang = useLang('column', 'action');
+    const { auth } = usePage<SharedData>().props;
     return assets?.map((asset, index) => (
         <div className={cn('m-0 border-b px-4 py-1 last:border-none', className)} key={index}>
             <div className="flex items-center justify-between">
@@ -47,18 +50,22 @@ export default function List({ title, className, assets }: { title?: string; cla
                             <DropdownMenuLabel>
                                 <p className="max-w-40 truncate font-semibold">{asset.name}</p>
                             </DropdownMenuLabel>
-                            <Separator className="my-1" />
-                            <Edit title={title ?? '-'} asset={asset} />
-                            <Delete
-                                title={title ?? '-'}
-                                permissions={['asset delete']}
-                                routes="asset.destroy"
-                                description={asset.name}
-                                id={asset.id}
-                            />
+                            {auth.user.id === asset.user_id && (
+                                <>
+                                    <Separator className="my-1" />
+                                    <Edit title={title ?? '-'} asset={asset} />
+                                    <Delete
+                                        title={title ?? '-'}
+                                        permissions={['asset delete']}
+                                        routes="asset.destroy"
+                                        description={asset.name}
+                                        id={asset.id}
+                                    />
+                                </>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <p className='text-xs text-muted-foreground'>{numberFormat(asset.initial_value)}</p>
+                    <p className="text-muted-foreground text-xs">{numberFormat(asset.initial_value)}</p>
                     <Transaction title={'Transaksi ' + asset.name + ' (' + asset.owner + ')'} asset={asset} />
                 </div>
             </div>

@@ -1,6 +1,6 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 
-import { type BreadcrumbItem } from '@/types';
+import { SharedData, type BreadcrumbItem } from '@/types';
 
 import Delete from '@/components/delete';
 import HeadingSmall from '@/components/heading-small';
@@ -24,13 +24,14 @@ export default function Collaborator({ title, users }: { title: string; users: A
             href: '/profiles/collaborator',
         },
     ];
+    const { auth } = usePage<SharedData>().props;
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={title} />
             <ProfileLayout>
                 <div className="space-y-6">
                     <HeadingSmall title="Anggota" description="Kelola anggota untuk mengelola data keuangan" />
-                    <Create title={title} withRoles={false} />
+                    {auth.user.id === auth.user.parent_id && <Create source="profile" title={title} withRoles={false} />}
                     <div className="space-y-2">
                         {users.map((user, index) => (
                             <div key={index} className="bg-card flex items-center justify-between gap-4 rounded-lg border px-4 py-2 shadow-sm">
@@ -81,16 +82,20 @@ export default function Collaborator({ title, users }: { title: string; users: A
                                         <DropdownMenuLabel className="flex items-center gap-2">
                                             <UserInfo user={user} showEmail />
                                         </DropdownMenuLabel>
-                                        <DropdownMenuSeparator />
-                                        <Edit title={title} user={user} />
-                                        {user.id !== user.parent_id && (
-                                            <Delete
-                                                title={title}
-                                                permissions={['user delete']}
-                                                routes="user.destroy"
-                                                description={user.name}
-                                                id={user.id}
-                                            />
+                                        {auth.user.id === auth.user.parent_id && (
+                                            <>
+                                                <DropdownMenuSeparator />
+                                                <Edit source="profile" title={title} user={user} />
+                                                {user.id !== user.parent_id && (
+                                                    <Delete
+                                                        title={title}
+                                                        permissions={['user delete']}
+                                                        routes="user.destroy"
+                                                        description={user.name}
+                                                        id={user.id}
+                                                    />
+                                                )}
+                                            </>
                                         )}
                                     </DropdownMenuContent>
                                 </DropdownMenu>
