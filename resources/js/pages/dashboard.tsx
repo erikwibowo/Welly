@@ -1,5 +1,3 @@
-'use client';
-
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { addHours } from 'date-fns';
@@ -113,6 +111,7 @@ export default function Dashboard({
                     {typeof window !== 'undefined' && (
                         <HighchartsReact
                             highcharts={Highcharts}
+                            oneToOne={true}
                             options={{
                                 chart: {
                                     type: 'pie',
