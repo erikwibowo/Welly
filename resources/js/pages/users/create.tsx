@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useLang } from '@/hooks/use-lang';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { usePermission } from '@/hooks/use-permission';
+import { cn } from '@/lib/utils';
 import { useForm } from '@inertiajs/react';
 import { Loader2, PlusIcon, SaveIcon } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
@@ -78,7 +79,7 @@ export default function Create({
                         <PlusIcon className="icon" /> {createText}
                     </Button>
                 ) : (
-                    <Button className="fixed right-4 bottom-24 z-20 h-12 w-12 rounded-lg shadow-lg">
+                    <Button className={cn('fixed right-4 z-20 h-12 w-12 rounded-lg shadow-lg', source === 'profile' ? 'bottom-20' : 'bottom-24')}>
                         <PlusIcon className="size-6" />
                     </Button>
                 ))
