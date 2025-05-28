@@ -1,3 +1,5 @@
+'use client';
+
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { addHours } from 'date-fns';
@@ -125,7 +127,9 @@ export default function Dashboard({
                                         data: categories.reduce(
                                             (acc, category) => {
                                                 const totalExpense = transactions
-                                                    ?.filter((transaction) => transaction.category_id === category.id && transaction.type === 'expense')
+                                                    ?.filter(
+                                                        (transaction) => transaction.category_id === category.id && transaction.type === 'expense',
+                                                    )
                                                     .reduce((sum, transaction) => Number(sum) + Number(transaction.amount), 0);
                                                 if (totalExpense) {
                                                     acc.push({
