@@ -31,7 +31,7 @@ export default function Collaborator({ title, users }: { title: string; users: A
             <ProfileLayout>
                 <div className="space-y-6">
                     <HeadingSmall title="Anggota" description="Kelola anggota untuk mengelola data keuangan" />
-                    {auth.user.id === auth.user.parent_id && <Create source="profile" title={title} withRoles={false} />}
+                    {auth.user.id == auth.user.parent_id && <Create source="profile" title={title} withRoles={false} />}
                     <div className="space-y-2">
                         {users.map((user, index) => (
                             <div key={index} className="bg-card flex items-center justify-between gap-4 rounded-lg border px-4 py-2 shadow-sm">
@@ -66,7 +66,7 @@ export default function Collaborator({ title, users }: { title: string; users: A
                                                     </TooltipContent>
                                                 </Tooltip>
                                             )}{' '}
-                                            {user.id === user.parent_id && <Badge>Utama</Badge>}
+                                            {user.id == user.parent_id && <Badge>Utama</Badge>}
                                         </div>
                                         <span className="text-muted-foreground text-xs">{user.email}</span>
                                     </div>
@@ -82,11 +82,11 @@ export default function Collaborator({ title, users }: { title: string; users: A
                                         <DropdownMenuLabel className="flex items-center gap-2">
                                             <UserInfo user={user} showEmail />
                                         </DropdownMenuLabel>
-                                        {auth.user.id === auth.user.parent_id && (
+                                        {auth.user.id == auth.user.parent_id && (
                                             <>
                                                 <DropdownMenuSeparator />
                                                 <Edit source="profile" title={title} user={user} />
-                                                {user.id !== user.parent_id && (
+                                                {user.id != user.parent_id && (
                                                     <Delete
                                                         title={title}
                                                         permissions={['user delete']}
