@@ -12,7 +12,7 @@ export default function SortableTableHead({
 }>) {
     return (
         <TableHead className="cursor-pointer" onClick={() => onSort(field)}>
-            <div className="flex w-full items-center justify-between gap-4">
+            <div className="flex w-full items-center justify-start gap-4">
                 {children}
                 <ChevronsUpDown className="icon opacity-20" />
             </div>
