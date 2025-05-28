@@ -79,7 +79,7 @@ export default function Create({
                         <PlusIcon className="icon" /> {createText}
                     </Button>
                 ) : (
-                    <Button className={cn('fixed right-4 z-20 h-12 w-12 rounded-lg shadow-lg', source === 'profile' ? 'bottom-20' : 'bottom-24')}>
+                    <Button className={cn('fixed right-4 z-20 h-12 w-12 rounded-lg shadow-lg', source === 'profile' ? 'bottom-18' : 'bottom-24')}>
                         <PlusIcon className="size-6" />
                     </Button>
                 ))
