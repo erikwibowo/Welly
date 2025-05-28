@@ -16,6 +16,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import TableLayout from '@/layouts/table-layout';
 import { cn } from '@/lib/utils';
 import { numberFormat, shortDateFormat } from '@/utils/formatter';
+import { Chart, Title } from '@highcharts/react';
+import { Pie } from '@highcharts/react/series';
 import Create from './transaction/create';
 import Edit from './transaction/edit';
 import List from './transaction/list';
@@ -26,6 +28,7 @@ export default function Dashboard({
     transactions,
     froms,
     tos,
+    categories,
 }: {
     title: string;
     totals: {
@@ -36,6 +39,7 @@ export default function Dashboard({
     transactions?: App.Models.Transaction[];
     froms: App.Models.Asset[];
     tos: App.Models.Asset[];
+    categories: App.Models.Category[];
 }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -86,22 +90,44 @@ export default function Dashboard({
                         </PopoverContent>
                     </Popover>
                 </div>
-                <div className="grid auto-rows-min gap-2 px-4 md:grid-cols-4 md:gap-4">
-                    <div className="bg-destructive/10 text-destructive border-destructive/20 relative rounded-lg border p-4 shadow">
+                <div className="flex gap-2 overflow-x-auto px-4 md:gap-4">
+                    <div className="bg-destructive/10 text-destructive border-destructive/20 relative w-60 shrink-0 rounded-lg border p-4 shadow">
                         <h4 className="text-lg font-semibold">Total Pengeluaran</h4>
                         <p className="text-2xl font-bold">{numberFormat(totals.expenses)}</p>
                         <ArrowUp className="absolute top-4 right-4 size-16 opacity-20" />
                     </div>
-                    <div className="bg-success/10 text-success border-success/20 relative rounded-lg border p-4 shadow">
+                    <div className="bg-success/10 text-success border-success/20 relative w-60 shrink-0 rounded-lg border p-4 shadow">
                         <h4 className="text-lg font-semibold">Total Pendapatan</h4>
                         <p className="text-2xl font-bold">{numberFormat(totals.incomes)}</p>
                         <ArrowDown className="absolute top-4 right-4 size-16 opacity-20" />
                     </div>
-                    <div className="bg-info/10 text-info border-info/20 relative rounded-lg border p-4 shadow">
+                    <div className="bg-info/10 text-info border-info/20 relative w-60 w-[calc-100%-4rem] shrink-0 rounded-lg border p-4 shadow">
                         <h4 className="text-lg font-semibold">Total Aset</h4>
                         <p className="text-2xl font-bold">{numberFormat(totals.assets)}</p>
                         <Wallet className="absolute top-4 right-4 size-16 opacity-20" />
                     </div>
+                </div>
+                <div className="px-4">
+                    <Chart>
+                        <Title>Pengeluaran Per Kategori</Title>
+                        <Pie.Series
+                            data={categories.reduce(
+                                (acc, category) => {
+                                    const totalExpense = transactions
+                                        ?.filter((transaction) => transaction.category_id === category.id && transaction.type === 'expense')
+                                        .reduce((sum, transaction) => sum + transaction.amount, 0);
+                                    if (totalExpense) {
+                                        acc.push({
+                                            name: category.name,
+                                            y: totalExpense,
+                                        });
+                                    }
+                                    return acc;
+                                },
+                                [] as { name: string; y: number }[],
+                            )}
+                        />
+                    </Chart>
                 </div>
                 <div className="flex items-center justify-between gap-4 px-4">
                     <h3 className="font-medium tracking-wide uppercase">Transaksi Terakhir</h3>

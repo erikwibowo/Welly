@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Asset;
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -36,6 +37,11 @@ class DashboardController extends Controller
                     $query->where('parent_id', auth()->user()->parent_id);
                 })->where('type', 'expense')->sum('amount'),
             ],
+            'categories' => Category::whereHas('user', function ($query) {
+                $query->where('parent_id', auth()->user()->parent_id);
+            })->whereHas('transactions', function ($query) use ($filters) {
+                $query->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']]);
+            })->with('transactions')->get(),
             'transactions' => Transaction::whereHas('user', function ($query) {
                 $query->where('parent_id', auth()->user()->parent_id);
             })->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']])
