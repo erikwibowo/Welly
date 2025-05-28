@@ -184,7 +184,7 @@ export default function Index({ title, filters, categories }: { title: string; f
                                             <DropdownMenuLabel>
                                                 <p className="max-w-40 truncate font-semibold">{category.name}</p>
                                             </DropdownMenuLabel>
-                                            {auth.user.id === category.user_id && (
+                                            {auth.user.id == category.user_id && (
                                                 <>
                                                     <Separator className="my-1" />
                                                     <Edit title={title} category={category} />

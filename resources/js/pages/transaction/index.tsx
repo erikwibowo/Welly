@@ -295,7 +295,7 @@ export default function Index({
                                             <DropdownMenuLabel>
                                                 <p className="max-w-40 truncate font-semibold">{transaction.note ?? '-'}</p>
                                             </DropdownMenuLabel>
-                                            {auth.user.id === transaction.user_id && (
+                                            {auth.user.id == transaction.user_id && (
                                                 <>
                                                     <Separator className="my-1" />
                                                     <Edit title={title} transaction={transaction} froms={froms} tos={tos} />

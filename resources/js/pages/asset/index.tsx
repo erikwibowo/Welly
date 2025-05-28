@@ -213,7 +213,7 @@ export default function Index({
                                             <DropdownMenuLabel>
                                                 <p className="max-w-40 truncate font-semibold">{asset.name}</p>
                                             </DropdownMenuLabel>
-                                            {auth.user.id === asset.user_id && (
+                                            {auth.user.id == asset.user_id && (
                                                 <>
                                                     <Separator className="my-1" />
                                                     <Edit title={title} asset={asset} />
