@@ -115,7 +115,7 @@ export default function Dashboard({
                                 (acc, category) => {
                                     const totalExpense = transactions
                                         ?.filter((transaction) => transaction.category_id === category.id && transaction.type === 'expense')
-                                        .reduce((sum, transaction) => sum + transaction.amount, 0);
+                                        .reduce((sum, transaction) => Number(sum) + Number(transaction.amount), 0);
                                     if (totalExpense) {
                                         acc.push({
                                             name: category.name,
