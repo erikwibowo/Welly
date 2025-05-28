@@ -82,11 +82,15 @@ class UserController extends Controller implements HasMiddleware
             } else {
                 $filename = null;
             }
-            $user = User::create([
+            $user = User::forceCreate([
                 'image' => $filename,
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'email_verified_at' => now(),
+            ]);
+            $user->update([
+                'parent_id' => $user->id,
             ]);
             $user->assignRole($request->roles);
             DB::commit();
