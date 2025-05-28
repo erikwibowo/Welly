@@ -16,8 +16,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import TableLayout from '@/layouts/table-layout';
 import { cn } from '@/lib/utils';
 import { numberFormat, shortDateFormat } from '@/utils/formatter';
-import { Chart, Title } from '@highcharts/react';
-import { Pie } from '@highcharts/react/series';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 import Create from './transaction/create';
 import Edit from './transaction/edit';
 import List from './transaction/list';
@@ -108,26 +108,38 @@ export default function Dashboard({
                     </div>
                 </div>
                 <div className="px-4">
-                    <Chart>
-                        <Title>Pengeluaran Per Kategori</Title>
-                        <Pie.Series
-                            data={categories.reduce(
-                                (acc, category) => {
-                                    const totalExpense = transactions
-                                        ?.filter((transaction) => transaction.category_id === category.id && transaction.type === 'expense')
-                                        .reduce((sum, transaction) => Number(sum) + Number(transaction.amount), 0);
-                                    if (totalExpense) {
-                                        acc.push({
-                                            name: category.name,
-                                            y: totalExpense,
-                                        });
-                                    }
-                                    return acc;
+                    <HighchartsReact
+                        highcharts={Highcharts}
+                        options={{
+                            chart: {
+                                type: 'pie',
+                            },
+                            title: {
+                                text: 'Pengeluaran Per Kategori',
+                            },
+                            series: [
+                                {
+                                    name: 'Pengeluaran',
+                                    colorByPoint: true,
+                                    data: categories.reduce(
+                                        (acc, category) => {
+                                            const totalExpense = transactions
+                                                ?.filter((transaction) => transaction.category_id === category.id && transaction.type === 'expense')
+                                                .reduce((sum, transaction) => Number(sum) + Number(transaction.amount), 0);
+                                            if (totalExpense) {
+                                                acc.push({
+                                                    name: category.name,
+                                                    y: totalExpense,
+                                                });
+                                            }
+                                            return acc;
+                                        },
+                                        [] as { name: string; y: number }[],
+                                    ),
                                 },
-                                [] as { name: string; y: number }[],
-                            )}
-                        />
-                    </Chart>
+                            ],
+                        }}
+                    />
                 </div>
                 <div className="flex items-center justify-between gap-4 px-4">
                     <h3 className="font-medium tracking-wide uppercase">Transaksi Terakhir</h3>
