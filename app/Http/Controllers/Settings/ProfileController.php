@@ -89,7 +89,7 @@ class ProfileController extends Controller
     {
         return Inertia::render('profiles/collaborator', [
             'title' => 'Anggota',
-            'users' => User::where('parent_id', Auth::user()->id)->get(),
+            'users' => auth()->user()->id == auth()->user()->parent_id ? User::with(['roles'])->where('parent_id', auth()->user()->id)->get() : User::with(['roles'])->where('parent_id', auth()->user()->parent_id)->get(),
         ]);
     }
 }

@@ -20,15 +20,33 @@ class DashboardController extends Controller
         return Inertia::render('dashboard', [
             'title' => __('app.text.dashboard'),
             'totals' => [
-                'assets' => Asset::where('type', 'asset')->sum('initial_value') - Asset::where('type', 'liability')->sum('initial_value') - Transaction::where('type', 'expense')->sum('amount') + Transaction::where('type', 'income')->sum('amount'),
-                'incomes' => Transaction::where('type', 'income')->sum('amount'),
-                'expenses' => Transaction::where('type', 'expense')->sum('amount'),
+                'assets' => Asset::whereHas('user', function ($query) {
+                    $query->where('parent_id', auth()->user()->parent_id);
+                })->where('type', 'asset')->sum('initial_value') - Asset::whereHas('user', function ($query) {
+                    $query->where('parent_id', auth()->user()->parent_id);
+                })->where('type', 'liability')->sum('initial_value') - Transaction::whereHas('user', function ($query) {
+                    $query->where('parent_id', auth()->user()->parent_id);
+                })->where('type', 'expense')->sum('amount') + Transaction::whereHas('user', function ($query) {
+                    $query->where('parent_id', auth()->user()->parent_id);
+                })->where('type', 'income')->sum('amount'),
+                'incomes' => Transaction::whereHas('user', function ($query) {
+                    $query->where('parent_id', auth()->user()->parent_id);
+                })->where('type', 'income')->sum('amount'),
+                'expenses' => Transaction::whereHas('user', function ($query) {
+                    $query->where('parent_id', auth()->user()->parent_id);
+                })->where('type', 'expense')->sum('amount'),
             ],
-            'transactions' => Transaction::whereBetween('date', [$filters['dateFrom'], $filters['dateTo']])
+            'transactions' => Transaction::whereHas('user', function ($query) {
+                $query->where('parent_id', auth()->user()->parent_id);
+            })->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']])
                 ->orderBy('date', 'desc')
                 ->with(['from', 'to', 'user', 'category'])->latest()->get(),
-            'froms' => Asset::orderBy('name')->get(),
-            'tos' => Asset::orderBy('name')->get(),
+            'froms' => Asset::whereHas('user', function ($query) {
+                $query->where('parent_id', auth()->user()->parent_id);
+            })->orderBy('name')->get(),
+            'tos' => Asset::whereHas('user', function ($query) {
+                $query->where('parent_id', auth()->user()->parent_id);
+            })->orderBy('name')->get(),
         ]);
     }
 }

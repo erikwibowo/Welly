@@ -43,7 +43,13 @@ class CategoryController extends Controller implements HasMiddleware
         return Inertia::render('category/index', [
             'title' => 'Kategori',
             'filters' => $filters,
-            'categories' => $categories->paginate($filters['perpage'])->onEachSide(0)->appends('query', null)->withQueryString()
+            'categories' => $categories->query(function ($query) {
+                if (!auth()->user()->hasRole('superadmin')) {
+                    $query->whereHas('user', function ($query) {
+                        $query->where('parent_id', auth()->user()->parent_id);
+                    });
+                }
+            })->paginate($filters['perpage'])->onEachSide(0)->appends('query', null)->withQueryString()
         ]);
     }
 
@@ -132,7 +138,9 @@ class CategoryController extends Controller implements HasMiddleware
 
     public function getCategory(Request $request)
     {
-        $categories = Category::where('type', $request->type)->get();
+        $categories = Category::whereHas('user', function ($query) {
+            $query->where('parent_id', auth()->user()->parent_id);
+        })->where('type', $request->type)->get();
         return response()->json($categories);
     }
 }

@@ -44,12 +44,21 @@ class AssetController extends Controller implements HasMiddleware
             'title' => 'Aset & Liabilitas',
             'filters' => $filters,
             'totals' => [
-                'initial_value' => Asset::sum('initial_value'),
-                'balance' => Asset::with(['transactionsFrom', 'transactionsTo'])->get()->sum(function ($asset) {
+                'initial_value' => Asset::whereHas('user', function ($query) {
+                    $query->where('parent_id', auth()->user()->parent_id);
+                })->sum('initial_value'),
+                'balance' => Asset::whereHas('user', function ($query) {
+                    $query->where('parent_id', auth()->user()->parent_id);
+                })->with(['transactionsFrom', 'transactionsTo'])->get()->sum(function ($asset) {
                     return $asset->transactionsFrom->sum('amount') - $asset->transactionsTo->sum('amount');
                 }),
             ],
             'assets' => $assets->query(function ($query) {
+                if (!auth()->user()->hasRole('superadmin')) {
+                    $query->whereHas('user', function ($query) {
+                        $query->where('parent_id', auth()->user()->parent_id);
+                    });
+                }
                 $query->with(['transactionsFrom.from', 'transactionsFrom.to', 'transactionsTo.from', 'transactionsTo.to']);
             })->paginate($filters['perpage'])->onEachSide(0)->appends('query', null)->withQueryString()
         ]);

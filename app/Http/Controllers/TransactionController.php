@@ -47,10 +47,20 @@ class TransactionController extends Controller implements HasMiddleware
         return Inertia::render('transaction/index', [
             'title' => 'Transaksi',
             'filters' => $filters,
-            'froms' => Asset::orderBy('name')->get(),
-            'tos' => Asset::orderBy('name')->get(),
-            'transactions' => $transactions->query(function ($query) {
+            'froms' => Asset::whereHas('user', function ($query) {
+                $query->where('parent_id', auth()->user()->parent_id);
+            })->orderBy('name')->get(),
+            'tos' => Asset::whereHas('user', function ($query) {
+                $query->where('parent_id', auth()->user()->parent_id);
+            })->orderBy('name')->get(),
+            'transactions' => $transactions->query(function ($query) use ($filters) {
                 $query->with(['category', 'from', 'to', 'user']);
+                $query->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']]);
+                if (!auth()->user()->hasRole('superadmin')) {
+                    $query->whereHas('user', function ($query) {
+                        $query->where('parent_id', auth()->user()->parent_id);
+                    });
+                }
             })->paginate($filters['perpage'])->onEachSide(0)->appends('query', null)->withQueryString()
         ]);
     }
