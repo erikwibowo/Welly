@@ -1,7 +1,7 @@
 import Heading from '@/components/heading';
 import { useLang } from '@/hooks/use-lang';
 import { Link } from '@inertiajs/react';
-import { Key, Trash, User } from 'lucide-react';
+import { Key, Trash, User, Users } from 'lucide-react';
 import { type PropsWithChildren } from 'react';
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
@@ -22,6 +22,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
         { group: profileGroup, value: 'profile', href: '/profiles/profile', icon: User },
         { group: passwordGroup, value: 'password', href: '/profiles/password', icon: Key },
         { group: deleteGroup, value: 'delete', href: '/profiles/delete', icon: Trash },
+        { group: 'Anggota', value: 'anggota', href: '/profiles/collaborator', icon: Users },
     ];
 
     return (

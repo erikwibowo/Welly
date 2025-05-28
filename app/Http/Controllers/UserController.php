@@ -83,16 +83,18 @@ class UserController extends Controller implements HasMiddleware
                 $filename = null;
             }
             $user = User::forceCreate([
+                'parent_id' => auth()->user()->id,
                 'image' => $filename,
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'email_verified_at' => now(),
             ]);
-            $user->update([
-                'parent_id' => $user->id,
-            ]);
-            $user->assignRole($request->roles);
+            if ($request->source == 'user') {
+                $user->assignRole($request->roles);
+            } else {
+                $user->assignRole('admin');
+            }
             DB::commit();
             return back()->with(['type' => 'success', 'message' => __('app.banner.created', ['name' => $user->name])]);
         } catch (\Throwable $th) {
@@ -142,7 +144,9 @@ class UserController extends Controller implements HasMiddleware
                 'email'     => $request->email,
                 'password'  => $request->password ? Hash::make($request->password) : $user->password,
             ]);
-            $user->syncRoles($request->roles);
+            if ($request->source == 'user') {
+                $user->syncRoles($request->roles);
+            }
             DB::commit();
             return back()->with(['type' => 'success', 'message' => __('app.banner.updated', ['name' => $user->name])]);
         } catch (\Throwable $th) {

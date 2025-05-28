@@ -18,4 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::get('profiles/delete', function () {
         return Inertia::render('profiles/delete');
     })->name('delete');
+
+
+    Route::get('profiles/collaborator', [ProfileController::class, 'collaborator'])->name('profile.collaborator');
 });

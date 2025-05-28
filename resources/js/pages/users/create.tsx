@@ -12,7 +12,17 @@ import { useForm } from '@inertiajs/react';
 import { Loader2, PlusIcon, SaveIcon } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
-export default function Create({ title, roles }: { title: string; roles: App.Models.Role[] }) {
+export default function Create({
+    title,
+    roles,
+    withRoles = true,
+    source = 'user',
+}: {
+    title: string;
+    roles?: App.Models.Role[];
+    withRoles?: boolean;
+    source?: 'user' | 'profile';
+}) {
     const [open, setOpen] = useState(false);
     const isMobile = useIsMobile();
 
@@ -23,6 +33,7 @@ export default function Create({ title, roles }: { title: string; roles: App.Mod
         password: string;
         password_confirmation: string;
         roles: string[];
+        source: 'user' | 'profile';
     }>({
         image: null,
         name: '',
@@ -30,6 +41,7 @@ export default function Create({ title, roles }: { title: string; roles: App.Mod
         password: '',
         password_confirmation: '',
         roles: [],
+        source: source,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -50,6 +62,8 @@ export default function Create({ title, roles }: { title: string; roles: App.Mod
         setOpen(!open);
     };
     const createText = useLang('button', 'create');
+    const roleText = useLang('label', 'role');
+    const selectAllText = useLang('label', 'select_all');
 
     return (
         <ResponsiveDialog
@@ -164,54 +178,60 @@ export default function Create({ title, roles }: { title: string; roles: App.Mod
                     <InputError message={errors.password_confirmation} className="mt-2" />
                 </div>
 
-                <div className="flex flex-col space-y-2">
-                    <Label>
-                        {data.roles.length > 0 && <span>({data.roles.length}) </span>}
-                        {useLang('label', 'role')}
-                    </Label>
-                    <InputError message={errors.roles} />
-                    <Label className="flex items-center gap-2 pt-2" htmlFor="select-all-role">
-                        <Checkbox
-                            id="select-all-role"
-                            checked={data.roles.length === roles.length}
-                            onCheckedChange={(value) =>
-                                setData((prev) =>
-                                    value
-                                        ? {
-                                              ...prev,
-                                              roles: roles.map((role) => role.name),
-                                          }
-                                        : { ...prev, roles: [] },
-                                )
-                            }
-                        />
-                        {useLang('label', 'select_all')}
-                    </Label>
-                    {roles.map((role) => (
-                        <div className="pt-2" key={role.name}>
-                            <Label className="flex items-center gap-2" htmlFor={role.name}>
-                                <Checkbox
-                                    checked={data.roles.includes(role.name)}
-                                    id={role.name}
-                                    onCheckedChange={(value) =>
-                                        setData((prev) =>
-                                            value
-                                                ? {
-                                                      ...prev,
-                                                      roles: [...prev.roles, role.name],
-                                                  }
-                                                : {
-                                                      ...prev,
-                                                      roles: prev.roles.filter((r) => r !== role.name),
-                                                  },
-                                        )
-                                    }
-                                />
-                                {role.name === 'delete' ? <span className="text-destructive font-bold">{role.name}</span> : <span>{role.name}</span>}
-                            </Label>
-                        </div>
-                    ))}
-                </div>
+                {withRoles && roles && (
+                    <div className="flex flex-col space-y-2">
+                        <Label>
+                            {data.roles.length > 0 && <span>({data.roles.length}) </span>}
+                            {roleText}
+                        </Label>
+                        <InputError message={errors.roles} />
+                        <Label className="flex items-center gap-2 pt-2" htmlFor="select-all-role">
+                            <Checkbox
+                                id="select-all-role"
+                                checked={data.roles.length === roles.length}
+                                onCheckedChange={(value) =>
+                                    setData((prev) =>
+                                        value
+                                            ? {
+                                                  ...prev,
+                                                  roles: roles.map((role) => role.name),
+                                              }
+                                            : { ...prev, roles: [] },
+                                    )
+                                }
+                            />
+                            {selectAllText}
+                        </Label>
+                        {roles.map((role) => (
+                            <div className="pt-2" key={role.name}>
+                                <Label className="flex items-center gap-2" htmlFor={role.name}>
+                                    <Checkbox
+                                        checked={data.roles.includes(role.name)}
+                                        id={role.name}
+                                        onCheckedChange={(value) =>
+                                            setData((prev) =>
+                                                value
+                                                    ? {
+                                                          ...prev,
+                                                          roles: [...prev.roles, role.name],
+                                                      }
+                                                    : {
+                                                          ...prev,
+                                                          roles: prev.roles.filter((r) => r !== role.name),
+                                                      },
+                                            )
+                                        }
+                                    />
+                                    {role.name === 'delete' ? (
+                                        <span className="text-destructive font-bold">{role.name}</span>
+                                    ) : (
+                                        <span>{role.name}</span>
+                                    )}
+                                </Label>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </ResponsiveDialog>
     );
