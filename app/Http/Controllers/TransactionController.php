@@ -37,8 +37,8 @@ class TransactionController extends Controller implements HasMiddleware
             'q' => $request->q ?? '',
             'field' => $request->field ?? '',
             'order' => $request->order ?? '',
-            'dateFrom' => $request->dateFrom ?? now()->startOfMonth()->format('Y-m-d'),
-            'dateTo' => $request->dateTo ?? now()->lastOfMonth()->format('Y-m-d'),
+            'from' => $request->from ?? now()->startOfMonth()->format('Y-m-d'),
+            'to' => $request->to ?? now()->lastOfMonth()->format('Y-m-d'),
         ];
         $transactions =  Transaction::search($filters['q']);
         if ($request->has(['field', 'order'])) {
@@ -55,7 +55,7 @@ class TransactionController extends Controller implements HasMiddleware
             })->orderBy('name')->get(),
             'transactions' => $transactions->query(function ($query) use ($filters) {
                 $query->with(['category', 'from', 'to', 'user']);
-                $query->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']]);
+                $query->whereBetween('date', [$filters['from'], $filters['to']]);
                 if (!auth()->user()->hasRole('superadmin')) {
                     $query->whereHas('user', function ($query) {
                         $query->where('parent_id', auth()->user()->parent_id);

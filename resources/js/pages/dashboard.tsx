@@ -15,8 +15,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import TableLayout from '@/layouts/table-layout';
 import { cn } from '@/lib/utils';
 import { numberFormat, shortDateFormat } from '@/utils/formatter';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
 import { debounce, pickBy } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import Create from './transaction/create';
@@ -29,7 +27,6 @@ export default function Dashboard({
     transactions,
     froms,
     tos,
-    categories,
     filters,
 }: {
     title: string;
@@ -67,15 +64,15 @@ export default function Dashboard({
 
         if (date?.from && date?.to) {
             const debouncedData = debounce(() => {
-            router.get(route(String(route().current())), pickBy(date), {
-                replace: true,
-                preserveScroll: true,
-                preserveState: true,
-            });
+                router.get(route(String(route().current())), pickBy(date), {
+                    replace: true,
+                    preserveScroll: true,
+                    preserveState: true,
+                });
             }, 300);
             debouncedData();
             return () => {
-            debouncedData.cancel();
+                debouncedData.cancel();
             };
         }
     }, [date]);
@@ -132,47 +129,8 @@ export default function Dashboard({
                         <Wallet className="absolute top-4 right-4 size-16 opacity-20" />
                     </div>
                 </div>
-                <div className="px-4">
-                    {typeof window !== 'undefined' && (
-                        <HighchartsReact
-                            highcharts={Highcharts}
-                            oneToOne={true}
-                            options={{
-                                chart: {
-                                    type: 'pie',
-                                },
-                                title: {
-                                    text: 'Pengeluaran Per Kategori',
-                                },
-                                series: [
-                                    {
-                                        name: 'Pengeluaran',
-                                        colorByPoint: true,
-                                        data: categories.reduce(
-                                            (acc, category) => {
-                                                const totalExpense = transactions
-                                                    ?.filter(
-                                                        (transaction) => transaction.category_id === category.id && transaction.type === 'expense',
-                                                    )
-                                                    .reduce((sum, transaction) => Number(sum) + Number(transaction.amount), 0);
-                                                if (totalExpense) {
-                                                    acc.push({
-                                                        name: category.name,
-                                                        y: totalExpense,
-                                                    });
-                                                }
-                                                return acc;
-                                            },
-                                            [] as { name: string; y: number }[],
-                                        ),
-                                    },
-                                ],
-                            }}
-                        />
-                    )}
-                </div>
                 <div className="flex items-center justify-between gap-4 px-4">
-                    <h3 className="font-medium tracking-wide uppercase">Transaksi Terakhir</h3>
+                    <h3 className="font-medium tracking-wide uppercase">10 Transaksi Terakhir</h3>
                     <Link className="md:hidden" href={route('transaction.index')}>
                         <Button size="icon" variant="outline">
                             <ChevronRight />

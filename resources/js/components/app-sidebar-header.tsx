@@ -10,7 +10,7 @@ import { Button } from './ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { UserMenuContent } from './user-menu-content';
 
-export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: BreadcrumbItemType[] }) {
+export function AppSidebarHeader({ breadcrumbs = [], subtitle }: { breadcrumbs?: BreadcrumbItemType[], subtitle?: string }) {
     const [scrollY, setScrollY] = useState(0);
 
     const { auth } = usePage<SharedData>().props;
@@ -28,7 +28,10 @@ export function AppSidebarHeader({ breadcrumbs = [] }: { breadcrumbs?: Breadcrum
             <div className="mx-auto flex w-full items-center justify-between gap-2 px-4">
                 <div className="flex items-center gap-2">
                     <SidebarTrigger className="hidden md:flex" />
-                    <Breadcrumbs breadcrumbs={breadcrumbs} />
+                    <div className="flex flex-col">
+                        <Breadcrumbs breadcrumbs={breadcrumbs} />
+                        {subtitle && <p className="text-muted-foreground md:hidden text-xs">{subtitle}</p>}
+                    </div>
                 </div>
                 <div className="flex items-center gap-2">
                     <AppearanceToggleDropdown />

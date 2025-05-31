@@ -68,8 +68,8 @@ export interface Filter {
     q: string;
     field: string;
     order: string;
-    dateFrom?: Date | undefined;
-    dateTo?: Date | undefined;
+    from?: Date | undefined;
+    to?: Date | undefined;
     date?: Date | undefined;
 }
 

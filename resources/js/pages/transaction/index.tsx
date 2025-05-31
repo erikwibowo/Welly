@@ -48,18 +48,14 @@ export default function Index({
     ];
     const isFirstRun = useRef(true);
 
-    const now = new Date();
-    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
     type FilterState = {
         perpage: number;
         q: string;
         field: string;
         order: string;
         page: number;
-        dateFrom?: Date;
-        dateTo?: Date;
+        from?: Date;
+        to?: Date;
     };
 
     const [filter, setFilter] = useState<FilterState>({
@@ -68,8 +64,8 @@ export default function Index({
         field: filters.field,
         order: filters.order,
         page: filters.page || 1,
-        dateFrom: filters.dateFrom ?? firstDayOfMonth,
-        dateTo: filters.dateTo ?? lastDayOfMonth,
+        from: filters.from,
+        to: filters.to,
     });
     const [selected, setSelected] = useState<number[]>([]);
     useEffect(() => {
@@ -101,7 +97,10 @@ export default function Index({
     const actionColumnLang = useLang('column', 'action');
     const { auth } = usePage<SharedData>().props;
     return (
-        <TableLayout breadcrumbs={breadcrumbs}>
+        <TableLayout
+            breadcrumbs={breadcrumbs}
+            subtitle={shortDateFormat(addHours(filters.from!, 7).toString()) + ' - ' + shortDateFormat(addHours(filters.to!, 7).toString())}
+        >
             <Head title={title} />
             <div className="mx-auto w-full space-y-4 py-4">
                 <div className="flex scroll-px-0.5 items-center justify-between gap-4 overflow-x-auto px-4">
@@ -136,18 +135,18 @@ export default function Index({
                                     className={cn(
                                         'dark:bg-input/30 border-input w-fit justify-between border bg-transparent text-left font-normal',
                                         'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
-                                        !filters.dateFrom && 'text-muted-foreground',
+                                        !filters.from && 'text-muted-foreground',
                                     )}
                                 >
                                     <span className="hidden sm:inline">
-                                        {filters.dateFrom ? (
-                                            filters.dateTo ? (
+                                        {filters.from ? (
+                                            filters.to ? (
                                                 <>
-                                                    {shortDateFormat(addHours(filters.dateFrom, 7).toString())} -{' '}
-                                                    {shortDateFormat(addHours(filters.dateTo, 7).toString())}
+                                                    {shortDateFormat(addHours(filters.from, 7).toString())} -{' '}
+                                                    {shortDateFormat(addHours(filters.to, 7).toString())}
                                                 </>
                                             ) : (
-                                                shortDateFormat(addHours(filters.dateFrom, 7).toString())
+                                                shortDateFormat(addHours(filters.from, 7).toString())
                                             )
                                         ) : (
                                             <span>Pilih Tanggal</span>
@@ -159,13 +158,30 @@ export default function Index({
                             <PopoverContent className="w-auto p-0" align="start">
                                 <Calendar
                                     mode="range"
-                                    defaultMonth={filters.dateFrom}
+                                    defaultMonth={filters.from}
                                     selected={
                                         {
-                                            from: new Date(filters.dateFrom || firstDayOfMonth),
-                                            to: new Date(filters.dateTo || lastDayOfMonth),
+                                            from: filters.from ? new Date(filters.from) : undefined,
+                                            to: filters.to ? new Date(filters.to) : undefined,
                                         } as DateRange
                                     }
+                                    onSelect={(range) => {
+                                        if (range && range.from && range.to) {
+                                            setFilter((prev) => ({
+                                                ...prev,
+                                                from: range.from,
+                                                to: range.to,
+                                                page: 1,
+                                            }));
+                                        } else {
+                                            setFilter((prev) => ({
+                                                ...prev,
+                                                from: filters.from ? new Date(filters.from) : undefined,
+                                                to: filters.to ? new Date(filters.to) : undefined,
+                                                page: 1,
+                                            }));
+                                        }
+                                    }}
                                     numberOfMonths={2}
                                 />
                             </PopoverContent>

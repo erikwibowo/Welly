@@ -47,7 +47,7 @@ class DashboardController extends Controller
                 $query->where('parent_id', auth()->user()->parent_id);
             })->whereBetween('date', [$filters['from'], $filters['to']])
                 ->orderBy('date', 'desc')
-                ->with(['from', 'to', 'user', 'category'])->latest()->get(),
+                ->with(['from', 'to', 'user', 'category'])->latest()->take(10)->get(),
             'froms' => Asset::whereHas('user', function ($query) {
                 $query->where('parent_id', auth()->user()->parent_id);
             })->orderBy('name')->get(),
