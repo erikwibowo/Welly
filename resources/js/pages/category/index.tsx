@@ -170,7 +170,7 @@ export default function Index({ title, filters, categories }: { title: string; f
                                 </TableCell>
                                 <TableHead>{numberFormat(categories.from + index)}</TableHead>
                                 <TableCell className="font-medium">{category.name}</TableCell>
-                                <TableCell>{category.type === 'income' ? 'Pendapatan' : 'Pengeluaran'}</TableCell>
+                                <TableCell>{category.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}</TableCell>
                                 <TableCell>{dateFormat(category.created_at || '')}</TableCell>
                                 <TableCell className="text-right">
                                     <DropdownMenu modal={false}>

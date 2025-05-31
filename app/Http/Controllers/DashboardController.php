@@ -32,10 +32,10 @@ class DashboardController extends Controller
                 })->where('type', 'income')->sum('amount'),
                 'incomes' => Transaction::whereHas('user', function ($query) {
                     $query->where('parent_id', auth()->user()->parent_id);
-                })->where('type', 'income')->sum('amount'),
+                })->where('type', 'income')->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']])->sum('amount'),
                 'expenses' => Transaction::whereHas('user', function ($query) {
                     $query->where('parent_id', auth()->user()->parent_id);
-                })->where('type', 'expense')->sum('amount'),
+                })->where('type', 'expense')->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']])->sum('amount'),
             ],
             'categories' => Category::whereHas('user', function ($query) {
                 $query->where('parent_id', auth()->user()->parent_id);

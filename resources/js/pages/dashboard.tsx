@@ -97,7 +97,7 @@ export default function Dashboard({
                         <ArrowUp className="absolute top-4 right-4 size-16 opacity-20" />
                     </div>
                     <div className="bg-success/10 text-success border-success/20 relative w-60 shrink-0 rounded-lg border p-4 shadow">
-                        <h4 className="text-lg font-semibold">Total Pendapatan</h4>
+                        <h4 className="text-lg font-semibold">Total Pemasukan</h4>
                         <p className="text-2xl font-bold">{numberFormat(totals.incomes)}</p>
                         <ArrowDown className="absolute top-4 right-4 size-16 opacity-20" />
                     </div>
