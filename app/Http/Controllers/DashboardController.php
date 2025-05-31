@@ -15,11 +15,12 @@ class DashboardController extends Controller
     public function index(Request $request): Response
     {
         $filters = [
-            'dateFrom' => $request->dateFrom ?? now()->startOfMonth()->format('Y-m-d'),
-            'dateTo' => $request->dateTo ?? now()->endOfMonth()->format('Y-m-d'),
+            'from' => $request->from ?? now()->startOfMonth()->format('Y-m-d'),
+            'to' => $request->to ?? now()->endOfMonth()->format('Y-m-d'),
         ];
         return Inertia::render('dashboard', [
             'title' => __('app.text.dashboard'),
+            'filters' => $filters,
             'totals' => [
                 'assets' => Asset::whereHas('user', function ($query) {
                     $query->where('parent_id', auth()->user()->parent_id);
@@ -32,19 +33,19 @@ class DashboardController extends Controller
                 })->where('type', 'income')->sum('amount'),
                 'incomes' => Transaction::whereHas('user', function ($query) {
                     $query->where('parent_id', auth()->user()->parent_id);
-                })->where('type', 'income')->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']])->sum('amount'),
+                })->where('type', 'income')->whereBetween('date', [$filters['from'], $filters['to']])->sum('amount'),
                 'expenses' => Transaction::whereHas('user', function ($query) {
                     $query->where('parent_id', auth()->user()->parent_id);
-                })->where('type', 'expense')->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']])->sum('amount'),
+                })->where('type', 'expense')->whereBetween('date', [$filters['from'], $filters['to']])->sum('amount'),
             ],
             'categories' => Category::whereHas('user', function ($query) {
                 $query->where('parent_id', auth()->user()->parent_id);
             })->whereHas('transactions', function ($query) use ($filters) {
-                $query->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']]);
+                $query->whereBetween('date', [$filters['from'], $filters['to']]);
             })->with('transactions')->get(),
             'transactions' => Transaction::whereHas('user', function ($query) {
                 $query->where('parent_id', auth()->user()->parent_id);
-            })->whereBetween('date', [$filters['dateFrom'], $filters['dateTo']])
+            })->whereBetween('date', [$filters['from'], $filters['to']])
                 ->orderBy('date', 'desc')
                 ->with(['from', 'to', 'user', 'category'])->latest()->get(),
             'froms' => Asset::whereHas('user', function ($query) {

@@ -1,8 +1,7 @@
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { addHours } from 'date-fns';
 import { ArrowDown, ArrowRight, ArrowUp, Calendar as CalendarIcon, ChevronRight, EllipsisIcon, Wallet } from 'lucide-react';
-import * as React from 'react';
 import { DateRange } from 'react-day-picker';
 
 import Delete from '@/components/delete';
@@ -18,6 +17,8 @@ import { cn } from '@/lib/utils';
 import { numberFormat, shortDateFormat } from '@/utils/formatter';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { debounce, pickBy } from 'lodash';
+import { useEffect, useRef, useState } from 'react';
 import Create from './transaction/create';
 import Edit from './transaction/edit';
 import List from './transaction/list';
@@ -29,8 +30,13 @@ export default function Dashboard({
     froms,
     tos,
     categories,
+    filters,
 }: {
     title: string;
+    filters: {
+        from?: Date;
+        to?: Date;
+    };
     totals: {
         assets: number;
         incomes: number;
@@ -47,13 +53,32 @@ export default function Dashboard({
             href: '/dashboard',
         },
     ];
-    const now = new Date();
-    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    const [date, setDate] = React.useState<DateRange | undefined>({
-        from: firstDayOfMonth,
-        to: lastDayOfMonth,
+    const isFirstRun = useRef(true);
+    const [date, setDate] = useState<DateRange | undefined>({
+        from: filters.from,
+        to: filters.to,
     });
+
+    useEffect(() => {
+        if (isFirstRun.current) {
+            isFirstRun.current = false;
+            return;
+        }
+
+        if (date?.from && date?.to) {
+            const debouncedData = debounce(() => {
+            router.get(route(String(route().current())), pickBy(date), {
+                replace: true,
+                preserveScroll: true,
+                preserveState: true,
+            });
+            }, 300);
+            debouncedData();
+            return () => {
+            debouncedData.cancel();
+            };
+        }
+    }, [date]);
     return (
         <TableLayout breadcrumbs={breadcrumbs}>
             <Head title={title} />
