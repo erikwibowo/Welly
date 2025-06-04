@@ -1,5 +1,5 @@
-import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
+import { SharedData, type BreadcrumbItem } from '@/types';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { addHours } from 'date-fns';
 import { ArrowDown, ArrowRight, ArrowUp, Calendar as CalendarIcon, ChevronRight, EllipsisIcon, Wallet } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
@@ -76,6 +76,7 @@ export default function Dashboard({
             };
         }
     }, [date]);
+    const { auth } = usePage<SharedData>().props;
     return (
         <TableLayout breadcrumbs={breadcrumbs}>
             <Head title={title} />
@@ -203,15 +204,19 @@ export default function Dashboard({
                                                 <DropdownMenuLabel>
                                                     <p className="max-w-40 truncate font-semibold">{transaction.note ?? '-'}</p>
                                                 </DropdownMenuLabel>
-                                                <Separator className="my-1" />
-                                                <Edit title="Transaksi" transaction={transaction} froms={froms} tos={tos} />
-                                                <Delete
-                                                    title="Transaksi"
-                                                    permissions={['transaction delete']}
-                                                    routes="transaction.destroy"
-                                                    description={transaction.note ?? '-'}
-                                                    id={transaction.id}
-                                                />
+                                                {auth.user.id == transaction.user_id && (
+                                                    <>
+                                                        <Separator className="my-1" />
+                                                        <Edit title="Transaksi" transaction={transaction} froms={froms} tos={tos} />
+                                                        <Delete
+                                                            title="Transaksi"
+                                                            permissions={['transaction delete']}
+                                                            routes="transaction.destroy"
+                                                            description={transaction.note ?? '-'}
+                                                            id={transaction.id}
+                                                        />
+                                                    </>
+                                                )}
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>

@@ -28,12 +28,12 @@ export default function List({
     const actionColumnLang = useLang('column', 'action');
     const { auth } = usePage<SharedData>().props;
     return transactions?.map((transaction, index) => (
-        <div className={cn('m-0 border-b px-4 py-2 last:border-none', className)} key={index}>
+        <div className={cn('m-0 border-t px-4 py-2 first:border-none last:border-none', className)} key={index}>
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <div
                         className={cn(
-                            'flex size-10 items-center justify-center rounded-full',
+                            'flex size-10 shrink-0 items-center justify-center rounded-full',
                             transaction.type === 'income'
                                 ? 'bg-success/10 text-success'
                                 : transaction.type === 'expense'
