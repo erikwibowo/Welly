@@ -22,7 +22,7 @@ const setCookie = (name: string, value: string, days = 365) => {
 const updateMetaThemeColor = (isDark: boolean) => {
     if (typeof document === 'undefined') return;
 
-    const darkColor = '#0b0809';
+    const darkColor = '#09090b';
     const lightColor = '#ffffff';
 
     let meta = document.querySelector('meta[name="theme-color"]');
