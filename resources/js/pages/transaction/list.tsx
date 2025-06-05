@@ -53,7 +53,9 @@ export default function List({
                         <h4 className="line-clamp-1 font-medium">{transaction.note ?? '-'}</h4>
                         <div className="text-xs">
                             {transaction.type !== 'transfer' ? (
-                                <p>{transaction.from?.name + ' (' + transaction.from?.owner + ')'}</p>
+                                <p>
+                                    {transaction.category?.name} • {transaction.from?.name + ' (' + transaction.from?.owner + ')'}
+                                </p>
                             ) : (
                                 <p className="flex flex-wrap gap-1">
                                     <span>
